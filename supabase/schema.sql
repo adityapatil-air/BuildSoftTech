@@ -151,6 +151,16 @@ create table if not exists public.certificates (
   unique (kind, enrollment_id)
 );
 
+-- Public certificate check (callable without login; returns only what the verify page shows)
+create or replace function public.verify_certificate(p_no text)
+returns table (certificate_no text, kind text, title text, issued_at date, student_name text)
+language sql stable security definer set search_path = public as $$
+  select c.certificate_no, c.kind, c.title, c.issued_at, p.full_name
+  from public.certificates c join public.profiles p on p.id = c.student_id
+  where c.certificate_no = p_no;
+$$;
+grant execute on function public.verify_certificate(text) to anon, authenticated;
+
 -- ---------------------------------------------------------------------------
 -- Site settings (used by the existing /admin settings panel)
 -- ---------------------------------------------------------------------------
