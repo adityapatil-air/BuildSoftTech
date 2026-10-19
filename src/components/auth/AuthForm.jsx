@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Icon from '../Icon';
 import { getSupabaseBrowser } from '../../lib/supabase/client';
+import { toLoginEmail } from '../../data/accounts';
 
 const DEGREES = ['B.E. / B.Tech', 'M.E. / M.Tech', 'BCA / MCA', 'B.Sc. / M.Sc.', 'Diploma', 'Ph.D. / Research Scholar', 'Faculty', 'Working Professional', 'Other'];
 
@@ -50,7 +51,7 @@ const AuthForm = ({ mode }) => {
           return;
         }
       } else {
-        const { error: err } = await supabase.auth.signInWithPassword({ email: form.email.trim(), password: form.password });
+        const { error: err } = await supabase.auth.signInWithPassword({ email: toLoginEmail(form.email), password: form.password });
         if (err) throw err;
       }
       router.replace(next);
@@ -97,7 +98,9 @@ const AuthForm = ({ mode }) => {
                 <Field label="College / Institution"><input className="form-input" value={form.institution} onChange={set('institution')} autoComplete="organization" /></Field>
               </>
             )}
-            <Field label="Email"><input className="form-input" type="email" required value={form.email} onChange={set('email')} autoComplete="email" /></Field>
+            {isRegister
+              ? <Field label="Email"><input className="form-input" type="email" required value={form.email} onChange={set('email')} autoComplete="email" /></Field>
+              : <Field label="Email or username"><input className="form-input" type="text" required value={form.email} onChange={set('email')} autoComplete="username" autoCapitalize="none" spellCheck={false} /></Field>}
             <Field label="Password" hint={isRegister ? 'At least 8 characters.' : undefined}>
               <div className="admin-password">
                 <input className="form-input" type={show ? 'text' : 'password'} required minLength={isRegister ? 8 : undefined} value={form.password} onChange={set('password')} autoComplete={isRegister ? 'new-password' : 'current-password'} />
