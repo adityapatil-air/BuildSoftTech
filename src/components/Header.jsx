@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Icon from './Icon';
 import { IJEPA, SITE } from '../data/site';
+import UserMenu from './auth/UserMenu';
 
 const SERVICES = [
   { href: '/services/research-publication', label: 'Research Publication (IJEPA)', icon: 'fileText' },
@@ -45,7 +46,7 @@ const Dropdown = ({ label, items, isOpen, onToggle, onNavigate, pathname }) => {
   );
 };
 
-const Header = ({ contact }) => {
+const Header = ({ contact, user, profile }) => {
   const email = contact?.email || SITE.email;
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -124,7 +125,8 @@ const Header = ({ contact }) => {
           <NavLink href="/courses" pathname={pathname} onClick={closeMenu}>Courses</NavLink>
           <Dropdown label="Who We Serve" items={AUDIENCES} isOpen={openDropdown === 'audiences'} onToggle={() => toggle('audiences')} onNavigate={closeMenu} pathname={pathname} />
           <NavLink href="/faq" pathname={pathname} onClick={closeMenu}>FAQ</NavLink>
-          <Link href="/contact" className="nav-cta" onClick={closeMenu}>Contact Us</Link>
+          <NavLink href="/contact" pathname={pathname} onClick={closeMenu}>Contact</NavLink>
+          <UserMenu user={user} profile={profile} />
         </nav>
       </div>
     </header>

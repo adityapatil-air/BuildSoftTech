@@ -50,7 +50,7 @@ const Footer = ({ contact }) => {
     <div className="footer-disclaimer site-container"><strong>Disclaimer:</strong> {DISCLAIMER}</div>
     <div className="copyright site-container">
       <span>© {new Date().getFullYear()} BuildSoftTech. All rights reserved. Publisher of {IJEPA.name} (ISSN {IJEPA.issn}).</span>
-      <span><Link href="/privacy-policy">Privacy Policy</Link> &nbsp; | &nbsp; <Link href="/terms">Terms &amp; Conditions</Link> &nbsp; | &nbsp; <Link href="/disclaimer">Disclaimer</Link> &nbsp; | &nbsp; <Link href="/admin">Admin</Link></span>
+      <span><Link href="/privacy-policy">Privacy Policy</Link> &nbsp; | &nbsp; <Link href="/terms">Terms &amp; Conditions</Link> &nbsp; | &nbsp; <Link href="/disclaimer">Disclaimer</Link> &nbsp; | &nbsp; <Link href="/login">Student login</Link></span>
     </div>
   </footer>
   );

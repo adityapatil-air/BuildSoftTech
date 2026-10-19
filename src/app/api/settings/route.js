@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isAdmin } from '../../../lib/auth';
+import { getSession, isAdminSession } from '../../../lib/session';
 import { getSettings, saveSettings, storageBackend } from '../../../lib/store';
 
 export const dynamic = 'force-dynamic';
@@ -10,7 +10,7 @@ export async function GET() {
 }
 
 export async function PUT(request) {
-  if (!isAdmin()) return NextResponse.json({ error: 'Not signed in.' }, { status: 401 });
+  if (!isAdminSession(await getSession())) return NextResponse.json({ error: 'Admin sign-in required.' }, { status: 401 });
   let body;
   try { body = await request.json(); } catch { return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 }); }
   if (!body || typeof body !== 'object') return NextResponse.json({ error: 'Invalid settings.' }, { status: 400 });

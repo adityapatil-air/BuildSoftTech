@@ -21,15 +21,16 @@ Deploy to Vercel as a Next.js project (auto-detected, no extra config).
 
 ## Admin panel
 
-`/admin` is a single-user login (link in the footer). From there the client can change the internship fee / duration / mode / next batch, the course list (with optional fee and duration), the SCI/Scopus research-topic table, package fees and the contact details. Public pages read these values on every request.
+Sign-in is Supabase Auth for everyone (`/login`, `/register`). The admin is any profile with `role = 'admin'`; `/admin` and `/admin/*` require that role. From `/admin` the client edits the internship fee / duration / mode / next batch, the course list, the SCI/Scopus research-topic table, package fees and contact details, and (in progress on `dev`) manages courses, recordings, resources, internships, weekly reviews and certificates. See `docs/PLATFORM_PLAN.md`.
 
 Setup:
 
-1. Copy `.env.example` to `.env.local` and set `ADMIN_PASSWORD` and a random `ADMIN_SECRET`.
-2. Locally, saved settings go to `.data/settings.json` (gitignored).
-3. On Vercel the filesystem is not persistent, so also set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` and create a table `site_settings (key text primary key, value jsonb)`. The store (`src/lib/store.js`) switches to Supabase automatically when those are present.
+1. Create a Supabase project and run `supabase/schema.sql` in its SQL editor.
+2. Copy `.env.example` to `.env.local` and fill `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY`.
+3. Register on the site, then run `update public.profiles set role = 'admin' where email = '<your email>';`.
+4. Site settings are stored in the `site_settings` table (falls back to `.data/settings.json` locally when the service key is missing).
 
-API: `GET /api/settings` (public), `PUT /api/settings` (admin cookie), `POST/DELETE /api/admin/login`.
+API: `GET /api/settings` (public), `PUT /api/settings` (admin), `POST /auth/signout`.
 
 ## Where things live
 
@@ -48,5 +49,5 @@ API: `GET /api/settings` (public), `PUT /api/settings` (admin cookie), `POST/DEL
 - Replace the placeholder research titles / fees in `COLLAB_TOPICS` and `PACKAGES` (`src/data/content.js`).
 - Review the drafted Privacy, Terms and Refund policy texts in `src/views/Policies.jsx`.
 - Contact is by email and phone only (no form yet); add an enquiry form or API route when the backend is built.
-- Set `ADMIN_PASSWORD`, `ADMIN_SECRET` and the Supabase variables in the Vercel project settings before going live.
+- Set the three Supabase variables in the Vercel project settings before going live.
 - "Who we serve" photos are hot-linked from Unsplash; replace with the client's own photos in `public/` when available (`AUDIENCES` in `src/views/Home.jsx`).

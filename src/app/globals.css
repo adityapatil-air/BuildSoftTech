@@ -477,3 +477,55 @@ ul.checklist.is-negative li::before{content:'✕';color:var(--danger)}
 @media(max-width:1000px){.admin-shell{grid-template-columns:1fr}.admin-side{position:static}}
 .course-meta{margin:-4px 0 10px;font-size:12.5px;font-weight:700;color:var(--orange-deep)}
 .promo-batch{font-weight:700;color:var(--orange-deep)!important;margin-bottom:6px!important}
+
+/* ---- header user menu ---- */
+.primary-nav .nav-login{font-weight:700}
+.nav-signout{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin:0}
+.nav-signout span{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-signout button{border:0;background:none;color:var(--orange-deep);font-weight:700;cursor:pointer;padding:0}
+.nav-signout button:hover{text-decoration:underline}
+@media(max-width:1279px){.nav-signout{padding:12px 0;border-bottom:1px solid #f4eadf;justify-content:space-between}}
+
+/* ---- auth pages (login / register), same shell as IJEPA ---- */
+.auth-page{min-height:calc(100vh - 250px);display:flex;align-items:stretch;justify-content:center;background:radial-gradient(1200px 600px at 15% -10%,#fdf1e3 0%,#fdf9f3 45%,#fffaf4 100%);padding:0}
+.auth-shell{width:min(1080px,94%);margin:48px auto;display:grid;grid-template-columns:1fr 1fr;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-lg);background:#fff}
+.auth-visual{background:var(--grad-hero);color:#fff;padding:52px 44px;display:flex;flex-direction:column;justify-content:space-between;gap:30px;position:relative;overflow:hidden}
+.auth-visual::before{content:'';position:absolute;width:340px;height:340px;border-radius:50%;border:1px solid rgba(255,255,255,.18);top:-90px;right:-90px}
+.auth-visual::after{content:'';position:absolute;width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,.14);bottom:-70px;left:-50px}
+.auth-visual-brand{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.auth-visual-brand img{border-radius:50%;background:#fff}
+.auth-visual-brand strong{font-size:24px;font-weight:800;letter-spacing:-.5px}
+.auth-visual h2{font-size:26px;line-height:1.3;font-weight:800;margin:0 0 18px;position:relative;z-index:1;letter-spacing:-.4px}
+.auth-visual-points{list-style:none;padding:0;margin:0;position:relative;z-index:1}
+.auth-visual-points li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#f6e3d2;margin:12px 0;line-height:1.5}
+.auth-visual-points li .dot{margin-top:6px;background:#ffc48a}
+.auth-visual-foot{font-size:12px;color:#f0c9a6;position:relative;z-index:1;letter-spacing:.6px;text-transform:uppercase}
+.auth-panel{padding:52px 46px;display:flex;flex-direction:column;justify-content:center}
+.auth-panel h1{color:var(--brown);font-size:26px;margin:0 0 6px;font-weight:800;letter-spacing:-.5px}
+.auth-subtitle{color:var(--muted);font-size:13px;margin:0 0 26px;line-height:1.6}
+.auth-subtitle a{color:var(--orange-deep);font-weight:700}
+.auth-panel .form-group{margin-bottom:16px}
+.auth-panel .form-grid{gap:0 16px}
+@media(max-width:900px){.auth-shell{grid-template-columns:1fr;margin:24px auto}.auth-visual{display:none}.auth-panel{padding:38px 26px}}
+
+/* ---- student portal ---- */
+.portal{padding:36px 0 56px}
+.portal-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+.portal-head h1{margin:0 0 4px;font-size:30px;color:var(--brown);letter-spacing:-.6px}
+.portal-head p:not(.eyebrow){margin:0;color:var(--muted);font-size:13.5px}
+.portal-section{padding-top:34px}
+.portal-section h2{font-size:21px}
+.portal-empty{border:1.5px dashed #e8d6c2;border-radius:var(--r-lg);background:linear-gradient(180deg,#fdf9f3,#fff);padding:36px 24px;text-align:center;color:var(--muted);font-size:13.5px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.portal-empty .ui-icon{color:var(--orange)}
+.portal-empty p{margin:0}
+
+/* ---- admin: sidebar links + settings tabs ---- */
+.admin-side nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--ink);transition:background .15s,color .15s}
+.admin-side nav a:hover{background:var(--beige-2)}
+.admin-side nav a.is-active{background:var(--beige);color:var(--orange-deep)}
+.admin-side nav a .ui-icon{color:var(--orange)}
+.admin-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.admin-tabs button{display:inline-flex;align-items:center;gap:7px;border:1px solid transparent;background:none;padding:8px 12px;border-radius:var(--r-pill);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.admin-tabs button:hover{background:var(--beige-2);color:var(--ink)}
+.admin-tabs button.is-active{background:var(--beige);color:var(--orange-deep);border-color:#f3cfae}
+.admin-tabs button .ui-icon{color:var(--orange)}

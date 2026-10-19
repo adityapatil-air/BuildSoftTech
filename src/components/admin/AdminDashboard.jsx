@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Icon from '../Icon';
 
@@ -49,18 +48,13 @@ const AdminDashboard = ({ initial, backend }) => {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Save failed.');
       if (data.settings) setSettings(data.settings);
-      setStatus({ kind: 'ok', text: `Saved. The website now shows the new values (${data.backend === 'supabase' ? 'stored in Supabase' : 'stored in .data/settings.json'}).` });
+      setStatus({ kind: 'ok', text: 'Saved. The website now shows the new values.' });
       router.refresh();
     } catch (err) {
       setStatus({ kind: 'error', text: err.message });
     } finally {
       setSaving(false);
     }
-  };
-
-  const logout = async () => {
-    await fetch('/api/admin/login', { method: 'DELETE' });
-    router.refresh();
   };
 
   const addRow = (key, row) => set([key], [...settings[key], row]);
@@ -74,30 +68,17 @@ const AdminDashboard = ({ initial, backend }) => {
   };
 
   return (
-    <div className="admin-shell site-container">
-      <aside className="admin-side">
-        <div className="admin-side-head">
-          <img src="/logo.png" alt="" width="36" height="36" />
-          <div><strong>BuildSoftTech</strong><small>Admin</small></div>
-        </div>
-        <nav>
-          {SECTIONS.map((s) => (
-            <button key={s.id} type="button" className={section === s.id ? 'is-active' : ''} onClick={() => setSection(s.id)}>
-              <Icon name={s.icon} size={16} /> {s.label}
-            </button>
-          ))}
-        </nav>
-        <div className="admin-side-foot">
-          <small>Storage: {backend === 'supabase' ? 'Supabase' : 'local file (.data/settings.json)'}</small>
-          {settings.updatedAt && <small>Last saved {new Date(settings.updatedAt).toLocaleString()}</small>}
-          <Link href="/" className="button button-light button-small">View website</Link>
-          <button type="button" className="button button-light button-small" onClick={logout}>Sign out</button>
-        </div>
-      </aside>
-
-      <section className="admin-main">
+    <>
+      <div className="admin-tabs" role="tablist">
+        {SECTIONS.map((s) => (
+          <button key={s.id} type="button" role="tab" aria-selected={section === s.id} className={section === s.id ? 'is-active' : ''} onClick={() => setSection(s.id)}>
+            <Icon name={s.icon} size={15} /> {s.label}
+          </button>
+        ))}
+      </div>
+      <section>
         <div className="admin-toolbar">
-          <h1>{SECTIONS.find((s) => s.id === section)?.label}</h1>
+          <h1>Site settings · {SECTIONS.find((s) => s.id === section)?.label}</h1>
           <div className="row-actions">
             {dirty && <span className="tag is-warning">Unsaved changes</span>}
             <button type="button" className="button button-primary" onClick={save} disabled={saving || !dirty}>{saving ? 'Saving…' : 'Save changes'}</button>
@@ -196,7 +177,7 @@ const AdminDashboard = ({ initial, backend }) => {
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 };
 
