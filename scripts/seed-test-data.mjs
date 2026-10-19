@@ -37,6 +37,13 @@ async function ensureUser(acc) {
 }
 
 async function wipeTestData() {
+  // Uploaded PDFs live under <course_id>/ in storage and do not cascade, so remove them first.
+  const { data: oldCourses } = await db.from('courses').select('id').like('title', `${TEST_PREFIX}%`);
+  for (const c of oldCourses || []) {
+    const { data: files } = await db.storage.from('course-resources').list(c.id, { limit: 1000 });
+    const paths = (files || []).map((f) => `${c.id}/${f.name}`);
+    if (paths.length) await db.storage.from('course-resources').remove(paths);
+  }
   // Children cascade from courses / internships.
   must('delete test certificates', await db.from('certificates').delete().like('title', `${TEST_PREFIX}%`));
   must('delete test courses', await db.from('courses').delete().like('title', `${TEST_PREFIX}%`));
