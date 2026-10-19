@@ -2,6 +2,11 @@
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
+import WebSocketImpl from 'ws';
+
+// supabase-js refuses to start on Node < 22 without a WebSocket. We never use realtime on the
+// server, but the client still needs one to construct, so supply `ws` when the runtime has none.
+const realtimeOpts = typeof globalThis.WebSocket === 'undefined' ? { realtime: { transport: WebSocketImpl } } : {};
 
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '';
 export const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -14,6 +19,7 @@ export function createSupabaseServer() {
   if (!isSupabaseConfigured()) return null;
   const cookieStore = cookies();
   return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    ...realtimeOpts,
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll: (toSet) => {
@@ -30,5 +36,5 @@ export function createSupabaseServer() {
 // Privileged client (bypasses RLS). Server-only; never import from client components.
 export function createSupabaseAdmin() {
   if (!SUPABASE_URL || !SERVICE_KEY) return null;
-  return createClient(SUPABASE_URL, SERVICE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+  return createClient(SUPABASE_URL, SERVICE_KEY, { ...realtimeOpts, auth: { persistSession: false, autoRefreshToken: false } });
 }

@@ -2,12 +2,15 @@
   "name": "buildsofttech",
   "private": true,
   "version": "1.0.0",
-  "description": "BuildSoftTech — Research · Publication · Training · Technology. Parent website of IJEPA.",
+  "description": "BuildSoftTech \u2014 Research \u00b7 Publication \u00b7 Training \u00b7 Technology. Parent website of IJEPA.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:seed": "node scripts/seed-test-data.mjs",
+    "test:permissions": "node scripts/test-permissions.mjs",
+    "test:cleanup": "node scripts/cleanup-test-data.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -19,6 +22,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^3.7.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "ws": "^8.22.0"
   }
 }

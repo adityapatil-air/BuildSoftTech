@@ -32,6 +32,16 @@ Setup:
 
 API: `GET /api/settings` (public), `PUT /api/settings` (admin), `POST /auth/signout`.
 
+## Testing against Supabase
+
+```bash
+npm run test:seed          # test admin + test student + [TEST] courses, internship, reviews, certificate
+npm run test:permissions   # 43 checks of who can see and change what (visitor, student, admin)
+npm run test:cleanup       # removes all [TEST] data and both test users
+```
+
+Test logins are written to `.data/test-accounts.json` (gitignored). `test:permissions` also writes `.data/test-cookies.json` with session cookies for page tests; delete it when done.
+
 ## Where things live
 
 | Path | Purpose |

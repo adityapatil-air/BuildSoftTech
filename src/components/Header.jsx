@@ -29,17 +29,22 @@ const Header = ({ user, profile }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
   const moreRef = useRef(null);
+  const userRef = useRef(null);
 
-  useEffect(() => { setOpen(false); setMoreOpen(false); }, [pathname]);
+  useEffect(() => { setOpen(false); setMoreOpen(false); setUserOpen(false); }, [pathname]);
   useEffect(() => {
-    if (!moreOpen) return undefined;
-    const onDown = (e) => { if (moreRef.current && !moreRef.current.contains(e.target)) setMoreOpen(false); };
-    const onKey = (e) => { if (e.key === 'Escape') setMoreOpen(false); };
+    if (!moreOpen && !userOpen) return undefined;
+    const onDown = (e) => {
+      if (moreRef.current && !moreRef.current.contains(e.target)) setMoreOpen(false);
+      if (userRef.current && !userRef.current.contains(e.target)) setUserOpen(false);
+    };
+    const onKey = (e) => { if (e.key === 'Escape') { setMoreOpen(false); setUserOpen(false); } };
     document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);
     return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
-  }, [moreOpen]);
+  }, [moreOpen, userOpen]);
 
   const isActive = (href) => pathname === href || pathname.startsWith(`${href}/`);
   const moreActive = MORE.some((m) => isActive(m.href));
@@ -49,17 +54,17 @@ const Header = ({ user, profile }) => {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <img src="/logo.png" alt="" width="36" height="36" className="h-9 w-9 rounded-full" />
           <span className="flex flex-col leading-tight">
             <span className="font-display text-xl font-semibold tracking-tight text-foreground">BuildSoft<span className="text-primary">Tech</span></span>
-            <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Publisher of IJEPA</span>
+            <span className="whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Publisher of IJEPA</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-5 xl:flex" aria-label="Primary">
           {MAIN.map((l) => (
-            <Link key={l.href} href={l.href} className={cn('text-sm font-medium text-muted-foreground transition-colors hover:text-foreground', isActive(l.href) && 'font-semibold text-foreground')}>
+            <Link key={l.href} href={l.href} className={cn('whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground', isActive(l.href) && 'font-semibold text-foreground')}>
               {l.label}
             </Link>
           ))}
@@ -77,31 +82,36 @@ const Header = ({ user, profile }) => {
           </div>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {user ? (
-            <>
-              <Link href={isAdmin ? '/admin' : '/dashboard'} className="hidden rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary sm:inline-flex">
-                {isAdmin ? 'Admin' : 'My dashboard'}
-              </Link>
-              <form action="/auth/signout" method="post" className="hidden items-center gap-2 text-sm text-muted-foreground xl:flex">
-                <span className="max-w-[110px] truncate" title={user.email}>{firstName}</span>
-                <button type="submit" className="font-semibold text-primary hover:underline">Sign out</button>
-              </form>
-            </>
+            <div className="relative hidden sm:block" ref={userRef}>
+              <button type="button" aria-expanded={userOpen} onClick={() => setUserOpen((v) => !v)} className="inline-flex max-w-[180px] items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary">
+                <span className="truncate" title={user.email}>{firstName}</span>
+                <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform', userOpen && 'rotate-180')} />
+              </button>
+              {userOpen && (
+                <div className="paper-card absolute right-0 top-11 w-56 rounded-xl p-2">
+                  <p className="truncate px-3 pb-2 pt-1 text-xs text-muted-foreground">{user.email}</p>
+                  <Link href={isAdmin ? '/admin' : '/dashboard'} className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-secondary">{isAdmin ? 'Admin dashboard' : 'My dashboard'}</Link>
+                  {isAdmin && <Link href="/dashboard" className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-secondary">Student view</Link>}
+                  <form action="/auth/signout" method="post"><button type="submit" className="w-full rounded-md px-3 py-2 text-left text-sm text-foreground hover:bg-secondary">Sign out</button></form>
+                </div>
+              )}
+            </div>
           ) : (
-            <Link href="/login" className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:inline-flex">Login</Link>
+            <Link href="/login" className="hidden whitespace-nowrap px-1 text-sm font-medium text-muted-foreground hover:text-foreground sm:inline-flex">Login</Link>
           )}
-          <Link href="/contact" className="hidden rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex">
+          <Link href="/contact" className="hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex">
             Contact us
           </Link>
-          <button aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border lg:hidden" onClick={() => setOpen((v) => !v)}>
+          <button aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border xl:hidden" onClick={() => setOpen((v) => !v)}>
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
       {open && (
-        <nav className="max-h-[calc(100vh-64px)] overflow-y-auto border-t border-border bg-background px-4 py-3 lg:hidden" aria-label="Mobile">
+        <nav className="max-h-[calc(100vh-64px)] overflow-y-auto border-t border-border bg-background px-4 py-3 xl:hidden" aria-label="Mobile">
           <div className="flex flex-col gap-1">
             {[...MAIN, ...MORE].map((l) => (
               <Link key={l.href} href={l.href} className={cn('rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary', isActive(l.href) && 'bg-secondary')}>{l.label}</Link>
