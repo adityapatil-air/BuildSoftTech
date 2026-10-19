@@ -71,6 +71,10 @@ Admin (role = admin)
 - `/admin/internships`, `/admin/internships/[id]` — enrolments; per student: weeks, reviews, repo, certificate
 - `/admin/students` — all registered students
 
+## Status (19 Oct 2026)
+
+Built and tested end to end on `dev` against the live Supabase project: admin course create/edit/delete, classes with Drive recording links, PDF upload and links, enrolment approve/reject/complete/remove and add-by-email; internship create/edit/delete, per-student problem statement, weeks, start date, repo link and weekly reviews; certificate issue/revoke with numbers that are never reused; public verification and printable certificate at `/certificates/[number]`; student course and internship pages; Enrol / Apply buttons on `/courses` and `/internships`; admin overview counts. Not built: payment collection, emails to students on approval or review, public listing of completed programs.
+
 ## Delivery order
 
 1. Schema + Supabase clients + auth (register / login / logout), student dashboard shell.

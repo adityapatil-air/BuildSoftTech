@@ -41,6 +41,8 @@ async function wipeTestData() {
   must('delete test certificates', await db.from('certificates').delete().like('title', `${TEST_PREFIX}%`));
   must('delete test courses', await db.from('courses').delete().like('title', `${TEST_PREFIX}%`));
   must('delete test internships', await db.from('internships').delete().like('title', `${TEST_PREFIX}%`));
+  // Test runs advance the certificate counter; start each run from a clean slate.
+  await db.from('site_settings').delete().eq('key', 'certificate_counters');
 }
 
 async function main() {

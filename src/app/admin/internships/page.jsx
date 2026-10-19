@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { requireAdmin } from '../../../lib/session';
+import Flash from '../../../components/Flash';
 
 export const metadata = { title: 'Admin · Internships', robots: { index: false } };
 export const dynamic = 'force-dynamic';
 
-export default async function AdminInternships() {
+export default async function AdminInternships({ searchParams }) {
   const { supabase } = await requireAdmin('/admin/internships');
   const { data: rows, error } = await supabase
     .from('internships')
@@ -17,6 +18,7 @@ export default async function AdminInternships() {
         <h1>Internships</h1>
         <Link href="/admin/internships/new" className="button button-primary">+ New internship</Link>
       </div>
+      <Flash searchParams={searchParams} />
       {error && <div className="admin-alert is-error">Could not load internships: {error.message}. Has <code>supabase/schema.sql</code> been run?</div>}
       {!error && !rows?.length && (
         <div className="portal-empty"><p>No internship programs yet.</p><Link href="/admin/internships/new" className="button button-primary button-small">Create an internship</Link></div>

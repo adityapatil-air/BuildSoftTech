@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import Icon from '../Icon';
 
 const ITEMS = [
-  { href: '/admin', label: 'Site settings', icon: 'edit', exact: true },
+  { href: '/admin', label: 'Overview & settings', icon: 'edit', exact: true },
   { href: '/admin/courses', label: 'Courses', icon: 'book' },
   { href: '/admin/internships', label: 'Internships', icon: 'briefcase' },
   { href: '/admin/students', label: 'Students', icon: 'users' },

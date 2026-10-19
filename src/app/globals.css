@@ -244,3 +244,11 @@
 .policy-prose .page-card p:last-child, .policy-prose .page-card ul:last-child { margin-bottom: 0; }
 .policy-prose .is-note, .policy-prose .is-danger-note { background: oklch(0.73 0.145 68 / 10%); border-color: oklch(0.73 0.145 68 / 40%); color: var(--color-foreground); }
 .policy-updated { margin-top: 32px !important; font-size: 13px; border-top: 1px solid var(--color-border); padding-top: 16px; }
+
+/* printing: certificate only */
+@media print {
+  header, footer, .no-print, .skip-link { display: none !important; }
+  body { background: #fff !important; }
+  .certificate { box-shadow: none !important; border-color: #ccc !important; break-inside: avoid; }
+  @page { size: A4 landscape; margin: 12mm; }
+}

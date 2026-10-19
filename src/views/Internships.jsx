@@ -3,7 +3,7 @@ import { ButtonLink, CheckList, Container, CtaBand, Eyebrow, FeatureCards, PageH
 import { SITE } from '../data/site';
 import { INTERNSHIP_DOMAINS, INTERNSHIP_ELIGIBLE, INTERNSHIP_GAINS, INTERNSHIP_HIGHLIGHTS, INTERNSHIP_INCLUDES, INTERNSHIP_TIMELINE } from '../data/content';
 
-const Internships = ({ settings }) => {
+const Internships = ({ settings, batches }) => {
   const it = settings?.internship || { fee: '₹3,000/-', duration: '45 Days', mode: 'Online / Offline / Hybrid*' };
   const email = settings?.contact?.email || SITE.email;
   const applyHref = `mailto:${email}?subject=${encodeURIComponent('45-Day Internship Program — application')}`;
@@ -29,6 +29,8 @@ const Internships = ({ settings }) => {
           <p className="mt-5 max-w-2xl text-sm opacity-85">{it.nextBatch && <strong className="font-semibold">Next batch: {it.nextBatch}. </strong>}{it.note}</p>
         )}
       </PageHero>
+
+      {batches}
 
       <Section>
         <SectionHead title="Program structure" text="The program combines guided technical training, hands-on practice, project development, mentor support and internship certification." />

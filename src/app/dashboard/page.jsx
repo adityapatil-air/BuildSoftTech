@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Icon from '../../components/Icon';
 import { requireUser } from '../../lib/session';
+import Flash from '../../components/Flash';
 
 export const metadata = { title: 'My dashboard', robots: { index: false } };
 export const dynamic = 'force-dynamic';
@@ -21,6 +22,7 @@ export default async function DashboardPage({ searchParams }) {
   return (
     <div className="portal site-container">
       {searchParams?.denied && <div className="admin-alert is-error">That page is for administrators only.</div>}
+      <Flash searchParams={searchParams} />
       <div className="portal-head">
         <div>
           <p className="eyebrow accent">Student dashboard</p>

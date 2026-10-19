@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { requireAdmin } from '../../../lib/session';
+import Flash from '../../../components/Flash';
 
 export const metadata = { title: 'Admin · Courses', robots: { index: false } };
 export const dynamic = 'force-dynamic';
 
-export default async function AdminCourses() {
+export default async function AdminCourses({ searchParams }) {
   const { supabase } = await requireAdmin('/admin/courses');
   const { data: courses, error } = await supabase
     .from('courses')
@@ -17,6 +18,7 @@ export default async function AdminCourses() {
         <h1>Courses</h1>
         <Link href="/admin/courses/new" className="button button-primary">+ New course</Link>
       </div>
+      <Flash searchParams={searchParams} />
       {error && <div className="admin-alert is-error">Could not load courses: {error.message}. Has <code>supabase/schema.sql</code> been run?</div>}
       {!error && !courses?.length && (
         <div className="portal-empty"><p>No courses yet. Create the first one and students will be able to enrol from the website.</p><Link href="/admin/courses/new" className="button button-primary button-small">Create a course</Link></div>

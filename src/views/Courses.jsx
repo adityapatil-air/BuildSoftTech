@@ -9,7 +9,7 @@ const HOW = [
   'Online, offline or hybrid, depending on the batch',
 ];
 
-const Courses = ({ settings }) => {
+const Courses = ({ settings, batches }) => {
   const courses = settings?.courses || [];
   const email = settings?.contact?.email || SITE.email;
   const ask = (t) => `mailto:${email}?subject=${encodeURIComponent(`Course enquiry — ${t}`)}`;
@@ -20,8 +20,10 @@ const Courses = ({ settings }) => {
         eyebrow="Software Classes"
         title="Software classes that end with real projects"
         intro="Learn Technology. Build Projects. Develop Your Career. Practical software training programs for students, faculty members, working professionals and researchers — hands-on learning, project development and real-world applications rather than theory alone."
-        actions={<ButtonLink href={ask('Upcoming batches')} variant="accent">Ask about upcoming batches</ButtonLink>}
+        actions={<><ButtonLink href="#batches" variant="accent">See open batches</ButtonLink><ButtonLink href={ask('Upcoming batches')} variant="outline-light">Ask about upcoming batches</ButtonLink></>}
       />
+
+      {batches}
 
       <Section>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
