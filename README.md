@@ -6,7 +6,7 @@ Sister site of [IJEPA](https://ijepa.vercel.app/) (International Journal of Engi
 ## Stack
 
 - Next.js 14 (App Router) + React 18 — frontend only for now; API routes can be added later for the backend
-- Plain CSS (`src/app/globals.css`) — tokens mirror the IJEPA stylesheet, re-coloured
+- Tailwind CSS 4 (`src/app/globals.css`) with the design from the Lovable project github.com/adityapatil-air/research-hub-next: warm paper background, navy ink, saffron accent, Fraunces headings over Work Sans. Shared page blocks live in `src/components/ui.jsx`.
 
 ## Run
 
@@ -51,3 +51,4 @@ API: `GET /api/settings` (public), `PUT /api/settings` (admin), `POST /auth/sign
 - Contact is by email and phone only (no form yet); add an enquiry form or API route when the backend is built.
 - Set the three Supabase variables in the Vercel project settings before going live.
 - "Who we serve" photos are hot-linked from Unsplash; replace with the client's own photos in `public/` when available (`AUDIENCES` in `src/views/Home.jsx`).
+- The home hero image `public/hero.jpg` comes from the Lovable project and is AI-generated (the text on the books and wall is garbled); replace it with a real photo.

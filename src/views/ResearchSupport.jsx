@@ -1,37 +1,47 @@
 import React from 'react';
-import Link from 'next/link';
-import Icon from '../components/Icon';
-import { Cta, Features, PageBanner, Steps } from '../components/shared';
+import { ButtonLink, CheckList, CtaBand, FeatureCards, PageHero, PaperCard, Section, SectionHead, Timeline } from '../components/ui';
 import { RESEARCH_SUPPORT, WHY_US, WORKFLOW } from '../data/content';
 
 const ResearchSupport = () => (
   <div>
-    <PageBanner
-      eyebrow="Service 03 · Research Support"
-      title="Research Support Services"
-      crumbs={[{ href: '/services', label: 'Services' }]}
+    <PageHero
+      eyebrow="Research Support"
+      title="Help at every stage of the research lifecycle"
       intro="BuildSoftTech provides research assistance across different stages of the research lifecycle — from the first idea to results and analysis."
-      actions={<Link href="/contact" className="button button-primary">Discuss Your Research</Link>}
+      crumbs={[{ href: '/services', label: 'Services' }, { label: 'Research support' }]}
+      actions={<ButtonLink href="/contact" variant="accent">Discuss your research</ButtonLink>}
     />
-    <div className="page-body site-container">
-      <h2>Research Assistance</h2>
-      <div className="domain-grid">
+
+    <Section>
+      <SectionHead title="What we support" />
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {RESEARCH_SUPPORT.map((s) => (
-          <div className="domain-card" key={s.title}>
-            <div className="domain-head"><span className="feature-icon"><Icon name={s.icon} size={20} /></span><h3>{s.title}</h3></div>
-            {s.text && <p style={{ margin: '0 0 8px', fontSize: 13 }}>{s.text}</p>}
-            {s.items.length > 0 && <ul className="checklist is-flush">{s.items.map((i) => <li key={i}>{i}</li>)}</ul>}
-          </div>
+          <PaperCard key={s.title}>
+            <h3 className="font-display text-xl font-semibold tracking-tight">{s.title}</h3>
+            {s.text && <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>}
+            {s.items.length > 0 && <div className="mt-4"><CheckList items={s.items} /></div>}
+          </PaperCard>
         ))}
       </div>
+    </Section>
 
-      <h2>Our Research Publication Workflow</h2>
-      <Steps items={WORKFLOW} timeline />
+    <Section tone="secondary">
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.3fr]">
+        <SectionHead title="Our research publication workflow" text="Every engagement follows the same nine steps, so you always know where your work stands." />
+        <Timeline items={WORKFLOW} />
+      </div>
+    </Section>
 
-      <h2>Why Researchers Choose Us</h2>
-      <Features items={WHY_US} />
-    </div>
-    <Cta title="Start with a free consultation" text="Discuss your research topic, objectives and requirements with our research coordinator." actions={<><Link href="/contact" className="button button-primary">Discuss Your Research</Link><Link href="/services/research-collaboration" className="button button-outline">Explore Collaboration</Link></>} />
+    <Section>
+      <SectionHead title="Why researchers choose us" />
+      <div className="mt-10"><FeatureCards items={WHY_US} /></div>
+    </Section>
+
+    <CtaBand
+      title="Start with a consultation"
+      text="Discuss your research topic, objectives and requirements with our research coordinator."
+      actions={<><ButtonLink href="/contact" variant="accent">Contact us</ButtonLink><ButtonLink href="/services/research-collaboration" variant="outline-light">Explore collaboration</ButtonLink></>}
+    />
   </div>
 );
 

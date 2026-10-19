@@ -3,132 +3,126 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import Icon from './Icon';
-import { IJEPA, SITE } from '../data/site';
-import UserMenu from './auth/UserMenu';
+import { ChevronDown, Menu, X } from 'lucide-react';
+import { cn } from '../lib/utils';
 
-const SERVICES = [
-  { href: '/services/research-publication', label: 'Research Publication (IJEPA)', icon: 'fileText' },
-  { href: '/services/research-collaboration', label: 'SCI / Scopus Research Collaboration', icon: 'users' },
-  { href: '/services/research-support', label: 'Research Support Services', icon: 'flask' },
-  { href: '/internships', label: 'Internship Programs', icon: 'briefcase' },
-  { href: '/courses', label: 'Software Training', icon: 'code' },
-  { href: '/for-institutions', label: 'Institutional Programs', icon: 'building' },
-  { href: '/research-areas', label: 'Research Areas', icon: 'target' },
+const MAIN = [
+  { href: '/services/research-publication', label: 'Journal Publication' },
+  { href: '/courses', label: 'Software Classes' },
+  { href: '/internships', label: 'Internship & Training' },
+  { href: '/services/research-collaboration', label: 'Research Collaboration' },
 ];
 
-const AUDIENCES = [
-  { href: '/for-faculty', label: 'For Faculty Members', icon: 'graduation' },
-  { href: '/for-students', label: 'For Students', icon: 'user' },
-  { href: '/for-research-scholars', label: 'For Research Scholars', icon: 'bookOpen' },
-  { href: '/for-institutions', label: 'For Institutions', icon: 'building' },
+const MORE = [
+  { href: '/about', label: 'About BuildSoftTech' },
+  { href: '/services', label: 'All services' },
+  { href: '/services/research-support', label: 'Research support' },
+  { href: '/research-areas', label: 'Research areas' },
+  { href: '/for-faculty', label: 'For faculty members' },
+  { href: '/for-students', label: 'For students' },
+  { href: '/for-research-scholars', label: 'For research scholars' },
+  { href: '/for-institutions', label: 'For institutions' },
+  { href: '/faq', label: 'FAQ' },
 ];
 
-const NavLink = ({ href, pathname, children, ...rest }) => (
-  <Link href={href} className={pathname === href ? 'active' : ''} {...rest}>{children}</Link>
-);
-
-const Dropdown = ({ label, items, isOpen, onToggle, onNavigate, pathname }) => {
-  const active = items.some((i) => pathname === i.href);
-  return (
-    <div className={`nav-item ${isOpen ? 'is-open' : ''} ${active ? 'is-active' : ''}`}>
-      <button type="button" aria-expanded={isOpen} aria-haspopup="true" onClick={onToggle}>
-        {label} <Icon name="chevronDown" size={14} />
-      </button>
-      <div className="nav-dropdown" role="menu">
-        {items.map((item) => (
-          <Link key={item.href} href={item.href} className={pathname === item.href ? 'active' : ''} onClick={onNavigate} role="menuitem">
-            <Icon name={item.icon} size={16} /> {item.label}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const Header = ({ contact, user, profile }) => {
-  const email = contact?.email || SITE.email;
+const Header = ({ user, profile }) => {
   const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
-  const menuButtonRef = useRef(null);
-  const navRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef(null);
 
+  useEffect(() => { setOpen(false); setMoreOpen(false); }, [pathname]);
   useEffect(() => {
-    setIsMenuOpen(false);
-    setOpenDropdown(null);
-  }, [pathname]);
+    if (!moreOpen) return undefined;
+    const onDown = (e) => { if (moreRef.current && !moreRef.current.contains(e.target)) setMoreOpen(false); };
+    const onKey = (e) => { if (e.key === 'Escape') setMoreOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
+  }, [moreOpen]);
 
-  useEffect(() => {
-    if (!isMenuOpen && !openDropdown) return undefined;
-    const onKeyDown = (e) => {
-      if (e.key !== 'Escape') return;
-      setIsMenuOpen(false);
-      setOpenDropdown(null);
-      menuButtonRef.current?.focus();
-    };
-    const onClick = (e) => {
-      if (navRef.current && !navRef.current.contains(e.target)) setOpenDropdown(null);
-    };
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('mousedown', onClick);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('mousedown', onClick);
-    };
-  }, [isMenuOpen, openDropdown]);
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-    setOpenDropdown(null);
-  };
-  const toggle = (key) => setOpenDropdown((cur) => (cur === key ? null : key));
+  const isActive = (href) => pathname === href || pathname.startsWith(`${href}/`);
+  const moreActive = MORE.some((m) => isActive(m.href));
+  const isAdmin = profile?.role === 'admin';
+  const firstName = profile?.full_name?.split(' ')[0] || user?.email;
 
   return (
-    <header className="site-header">
-      <div className="institutional-bar">
-        <div>
-          <span>{SITE.tagline}</span>
-          <span className="institutional-extra">&nbsp;|&nbsp; Publisher of {IJEPA.name} · ISSN {IJEPA.issn}</span>
-        </div>
-        <div className="institutional-links">
-          <a className="hide-mobile" href={`mailto:${email}`}><Icon name="mail" size={13} /> {email}</a>
-          <a href={IJEPA.url} target="_blank" rel="noreferrer">{IJEPA.name} Journal <Icon name="arrowUpRight" size={13} /></a>
-        </div>
-      </div>
-
-      <div className="main-nav-wrap">
-        <Link href="/" className="site-brand" onClick={closeMenu}>
-          <img src="/logo.png" alt="" width="46" height="46" />
-          <span className="brand-wordmark">
-            <span className="brand-name">BuildSoftTech</span>
-            <span className="brand-tagline">Research · Publication · Training</span>
+    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <Link href="/" className="flex items-center gap-2.5">
+          <img src="/logo.png" alt="" width="36" height="36" className="h-9 w-9 rounded-full" />
+          <span className="flex flex-col leading-tight">
+            <span className="font-display text-xl font-semibold tracking-tight text-foreground">BuildSoft<span className="text-primary">Tech</span></span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Publisher of IJEPA</span>
           </span>
         </Link>
-        <button
-          ref={menuButtonRef}
-          className="menu-button"
-          type="button"
-          aria-label={isMenuOpen ? 'Close navigation' : 'Open navigation'}
-          aria-expanded={isMenuOpen}
-          aria-controls="primary-nav"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <Icon name={isMenuOpen ? 'x' : 'menu'} size={26} />
-        </button>
-        <nav id="primary-nav" ref={navRef} className={`primary-nav ${isMenuOpen ? 'is-open' : ''}`} aria-label="Primary navigation">
-          <NavLink href="/" pathname={pathname} onClick={closeMenu}>Home</NavLink>
-          <NavLink href="/about" pathname={pathname} onClick={closeMenu}>About Us</NavLink>
-          <Dropdown label="Services" items={SERVICES} isOpen={openDropdown === 'services'} onToggle={() => toggle('services')} onNavigate={closeMenu} pathname={pathname} />
-          <a href={IJEPA.url} target="_blank" rel="noreferrer" onClick={closeMenu}>IJEPA Journal <Icon name="arrowUpRight" size={13} /></a>
-          <NavLink href="/internships" pathname={pathname} onClick={closeMenu}>Internships</NavLink>
-          <NavLink href="/courses" pathname={pathname} onClick={closeMenu}>Courses</NavLink>
-          <Dropdown label="Who We Serve" items={AUDIENCES} isOpen={openDropdown === 'audiences'} onToggle={() => toggle('audiences')} onNavigate={closeMenu} pathname={pathname} />
-          <NavLink href="/faq" pathname={pathname} onClick={closeMenu}>FAQ</NavLink>
-          <NavLink href="/contact" pathname={pathname} onClick={closeMenu}>Contact</NavLink>
-          <UserMenu user={user} profile={profile} />
+
+        <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
+          {MAIN.map((l) => (
+            <Link key={l.href} href={l.href} className={cn('text-sm font-medium text-muted-foreground transition-colors hover:text-foreground', isActive(l.href) && 'font-semibold text-foreground')}>
+              {l.label}
+            </Link>
+          ))}
+          <div className="relative" ref={moreRef}>
+            <button type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen((v) => !v)} className={cn('inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground', moreActive && 'font-semibold text-foreground')}>
+              More <ChevronDown className={cn('h-4 w-4 transition-transform', moreOpen && 'rotate-180')} />
+            </button>
+            {moreOpen && (
+              <div className="paper-card absolute right-0 top-8 w-60 rounded-xl p-2">
+                {MORE.map((m) => (
+                  <Link key={m.href} href={m.href} className={cn('block rounded-md px-3 py-2 text-sm text-foreground hover:bg-secondary', isActive(m.href) && 'bg-secondary font-semibold')}>{m.label}</Link>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
+
+        <div className="flex items-center gap-2">
+          {user ? (
+            <>
+              <Link href={isAdmin ? '/admin' : '/dashboard'} className="hidden rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary sm:inline-flex">
+                {isAdmin ? 'Admin' : 'My dashboard'}
+              </Link>
+              <form action="/auth/signout" method="post" className="hidden items-center gap-2 text-sm text-muted-foreground xl:flex">
+                <span className="max-w-[110px] truncate" title={user.email}>{firstName}</span>
+                <button type="submit" className="font-semibold text-primary hover:underline">Sign out</button>
+              </form>
+            </>
+          ) : (
+            <Link href="/login" className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:inline-flex">Login</Link>
+          )}
+          <Link href="/contact" className="hidden rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex">
+            Contact us
+          </Link>
+          <button aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border lg:hidden" onClick={() => setOpen((v) => !v)}>
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
+
+      {open && (
+        <nav className="max-h-[calc(100vh-64px)] overflow-y-auto border-t border-border bg-background px-4 py-3 lg:hidden" aria-label="Mobile">
+          <div className="flex flex-col gap-1">
+            {[...MAIN, ...MORE].map((l) => (
+              <Link key={l.href} href={l.href} className={cn('rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary', isActive(l.href) && 'bg-secondary')}>{l.label}</Link>
+            ))}
+            <div className="mt-2 flex flex-col gap-1 border-t border-border pt-3">
+              <Link href="/contact" className="rounded-md bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground">Contact us</Link>
+              {user ? (
+                <>
+                  <Link href={isAdmin ? '/admin' : '/dashboard'} className="rounded-md px-3 py-2 text-sm font-medium text-primary">{isAdmin ? 'Admin' : 'My dashboard'}</Link>
+                  <form action="/auth/signout" method="post"><button type="submit" className="w-full rounded-md px-3 py-2 text-left text-sm font-medium text-muted-foreground">Sign out ({firstName})</button></form>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="rounded-md px-3 py-2 text-sm font-medium text-primary">Login</Link>
+                  <Link href="/register" className="rounded-md px-3 py-2 text-sm font-medium text-primary">Register</Link>
+                </>
+              )}
+            </div>
+          </div>
+        </nav>
+      )}
     </header>
   );
 };

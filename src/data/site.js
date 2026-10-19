@@ -1,11 +1,11 @@
 // Single place for contact details, external links and labels shared across pages.
-// TODO (client): confirm the email address before launch.
+// Contact email matches the Lovable design (IJEPA editorial inbox); admin can change it in /admin.
 
 export const SITE = {
   name: 'BuildSoftTech',
   tagline: 'Research · Publication · Training · Technology',
-  email: 'info@buildsofttech.com',
-  phoneDisplay: '+91 8149844901',
+  email: 'editor@ijepa.org',
+  phoneDisplay: '+91 81498 44901',
   phoneLink: '+918149844901',
   address: 'Shop No 2, Snehankit Colony, Karve Nagar, Pune-411052, Maharashtra, India',
   addressShort: 'Karve Nagar, Pune, India',

@@ -1,79 +1,92 @@
 import React from 'react';
 import Link from 'next/link';
-import Icon from '../components/Icon';
-import { Cta, PageBanner } from '../components/shared';
+import { ButtonLink, CheckList, Chips, CtaBand, Note, PageHero, PaperCard, Section, SectionHead } from '../components/ui';
 import { FACULTY_OUTPUT, FACULTY_SERVICES, INSTITUTIONAL_PROGRAMS, SCHOLAR_SERVICES, STUDENT_SERVICES } from '../data/content';
 
-const GridList = ({ items }) => (
-  <div className="page-card"><ul className="checklist is-flush" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', columnGap: 24 }}>{items.map((i) => <li key={i}>{i}</li>)}</ul></div>
+const LinkCards = ({ items }) => (
+  <div className="mt-12 grid gap-5 md:grid-cols-3">
+    {items.map((c) => (
+      <Link key={c.href} href={c.href} className="paper-card group rounded-xl p-6 transition-transform hover:-translate-y-0.5">
+        <h3 className="font-display text-lg font-semibold tracking-tight">{c.title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.text}</p>
+        <span className="mt-3 inline-block text-sm font-semibold text-primary group-hover:underline">Learn more →</span>
+      </Link>
+    ))}
+  </div>
 );
 
 export const ForFaculty = () => (
   <div>
-    <PageBanner eyebrow="For Faculty Members" title="Supporting Academic Research & Professional Growth" intro="BuildSoftTech provides research and technology services specifically designed for faculty members and academic professionals." actions={<Link href="/contact" className="button button-primary">Discuss Your Research</Link>} />
-    <div className="page-body site-container">
-      <h2>Services for Faculty</h2>
-      <GridList items={FACULTY_SERVICES} />
-      <h2>Research Output for Academic Documentation</h2>
-      <p>Research publications and legitimate scholarly contributions may be relevant to:</p>
-      <ul className="chip-list">{FACULTY_OUTPUT.map((o) => <li key={o}>{o}</li>)}</ul>
-      <div className="page-card is-note"><p><strong>Note:</strong> BuildSoftTech does not claim that any publication automatically qualifies for promotion, appraisal, NBA, NAAC or NIRF. Eligibility depends on the applicable rules and the institution/regulatory authority.</p></div>
-      <div className="card-grid" style={{ marginTop: 28 }}>
-        <Link href="/services/research-publication" className="service-card"><span className="service-icon"><Icon name="fileText" size={24} /></span><h3>Publish through IJEPA</h3><p>Peer-reviewed publication support through our own journal.</p><span className="section-link">Learn More →</span></Link>
-        <Link href="/services/research-collaboration" className="service-card"><span className="service-icon"><Icon name="users" size={24} /></span><h3>SCI / Scopus Collaboration</h3><p>Contribution-based research collaboration toward indexed journals.</p><span className="section-link">Learn More →</span></Link>
-        <Link href="/for-institutions" className="service-card"><span className="service-icon"><Icon name="graduation" size={24} /></span><h3>Faculty Development Programs</h3><p>AI/ML, Data Science, Generative AI, research methodology and academic writing.</p><span className="section-link">Learn More →</span></Link>
+    <PageHero eyebrow="For faculty members" title="Supporting academic research & professional growth" intro="BuildSoftTech provides research and technology services specifically designed for faculty members and academic professionals." actions={<ButtonLink href="/contact" variant="accent">Discuss your research</ButtonLink>} />
+    <Section>
+      <SectionHead title="Services for faculty" />
+      <div className="mt-8"><CheckList items={FACULTY_SERVICES} cols={3} /></div>
+      <div className="mt-14 grid gap-8 md:grid-cols-2">
+        <div>
+          <h2 className="font-display text-2xl font-semibold tracking-tight">Research output for academic documentation</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Research publications and legitimate scholarly contributions may be relevant to:</p>
+          <div className="mt-5"><Chips items={FACULTY_OUTPUT} /></div>
+        </div>
+        <Note tone="warn" className="self-start">
+          <strong className="font-semibold">Note:</strong> BuildSoftTech does not claim that any publication automatically qualifies for promotion, appraisal, NBA, NAAC or NIRF. Eligibility depends on the applicable rules and the institution/regulatory authority.
+        </Note>
       </div>
-    </div>
-    <Cta title="Plan your next publication with us" text="Research topic consultation is the first step. Tell us what you are working on." actions={<><Link href="/contact" className="button button-primary">Discuss Your Research</Link><Link href="/services/research-collaboration" className="button button-outline">Explore Collaboration</Link></>} />
+      <LinkCards items={[
+        { href: '/services/research-publication', title: 'Publish through IJEPA', text: 'Peer-reviewed publication support through our own journal.' },
+        { href: '/services/research-collaboration', title: 'SCI / Scopus collaboration', text: 'Contribution-based research collaboration toward indexed journals.' },
+        { href: '/for-institutions', title: 'Faculty development programs', text: 'AI/ML, Data Science, Generative AI, research methodology and academic writing.' },
+      ]} />
+    </Section>
+    <CtaBand title="Plan your next publication with us" text="Research topic consultation is the first step. Tell us what you are working on." actions={<ButtonLink href="/contact" variant="accent">Contact us</ButtonLink>} />
   </div>
 );
 
 export const ForStudents = () => (
   <div>
-    <PageBanner eyebrow="For Students" title="Learn. Build. Implement. Showcase." intro="BuildSoftTech helps students develop practical skills beyond classroom learning." actions={<><Link href="/contact" className="button button-primary">Apply for Internship</Link><Link href="/courses" className="button button-outline">Browse Courses</Link></>} />
-    <div className="page-body site-container">
-      <h2>Student Services</h2>
-      <GridList items={STUDENT_SERVICES} />
-      <div className="card-grid" style={{ marginTop: 28 }}>
-        <Link href="/internships" className="service-card"><span className="service-icon"><Icon name="briefcase" size={24} /></span><h3>45-Day Paid Internship</h3><p>₹3,000/- · training, guided project, mentoring and completion certificate.</p><span className="section-link">Learn More →</span></Link>
-        <Link href="/courses" className="service-card"><span className="service-icon"><Icon name="code" size={24} /></span><h3>Software Training</h3><p>Python, Data Science, AI/ML, Full Stack, Cloud &amp; DevOps, Cybersecurity.</p><span className="section-link">Learn More →</span></Link>
-        <Link href="/services/research-publication" className="service-card"><span className="service-icon"><Icon name="fileText" size={24} /></span><h3>Publish your project research</h3><p>Turn a strong final-year project into a peer-reviewed paper through IJEPA.</p><span className="section-link">Learn More →</span></Link>
-      </div>
-    </div>
-    <Cta title="Start your practical learning journey" text="Choose an internship domain or a training program and apply in two minutes." actions={<><Link href="/contact" className="button button-primary">Apply for Internship</Link><Link href="/contact" className="button button-outline">Join Training</Link></>} />
+    <PageHero eyebrow="For students" title="Learn. Build. Implement. Showcase." intro="BuildSoftTech helps students develop practical skills beyond classroom learning." actions={<><ButtonLink href="/internships" variant="accent">45-day internship</ButtonLink><ButtonLink href="/courses" variant="outline-light">Software classes</ButtonLink></>} />
+    <Section>
+      <SectionHead title="Student services" />
+      <div className="mt-8"><CheckList items={STUDENT_SERVICES} cols={3} /></div>
+      <LinkCards items={[
+        { href: '/internships', title: '45-day paid internship', text: 'Training, a guided project, mentoring and a completion certificate.' },
+        { href: '/courses', title: 'Software classes', text: 'Python, Data Science, AI/ML, Full Stack, Cloud & DevOps, Cybersecurity.' },
+        { href: '/services/research-publication', title: 'Publish your project research', text: 'Turn a strong final-year project into a peer-reviewed paper through IJEPA.' },
+      ]} />
+    </Section>
+    <CtaBand title="Start your practical learning journey" text="Choose an internship domain or a training program." actions={<><ButtonLink href="/register" variant="accent">Create a student account</ButtonLink><ButtonLink href="/contact" variant="outline-light">Contact us</ButtonLink></>} />
   </div>
 );
 
 export const ForScholars = () => (
   <div>
-    <PageBanner eyebrow="For Research Scholars" title="From Research Problem to Research Publication" intro="Our research-support ecosystem helps Ph.D. and research scholars at every stage of the research lifecycle." actions={<Link href="/contact" className="button button-primary">Discuss Your Research</Link>} />
-    <div className="page-body site-container">
-      <h2>How we help research scholars</h2>
-      <GridList items={SCHOLAR_SERVICES} />
-      <div className="card-grid" style={{ marginTop: 28 }}>
-        <Link href="/services/research-support" className="service-card"><span className="service-icon"><Icon name="flask" size={24} /></span><h3>Research Support Services</h3><p>Idea development, literature review, methodology, implementation, results analysis.</p><span className="section-link">Learn More →</span></Link>
-        <Link href="/services/research-collaboration" className="service-card"><span className="service-icon"><Icon name="users" size={24} /></span><h3>SCI / Scopus Collaboration</h3><p>Join an ongoing research project with contribution-based authorship.</p><span className="section-link">Learn More →</span></Link>
-        <Link href="/services/research-publication" className="service-card"><span className="service-icon"><Icon name="fileText" size={24} /></span><h3>Publish through IJEPA</h3><p>Peer-reviewed engineering and technology journal published by BuildSoftTech.</p><span className="section-link">Learn More →</span></Link>
-      </div>
-    </div>
-    <Cta title="Stuck at a stage of your research?" text="Tell us where you are — problem identification, implementation, writing or reviewer response — and we will help you move forward." actions={<><Link href="/contact" className="button button-primary">Discuss Your Research</Link><Link href="/faq" className="button button-outline">Read the FAQ</Link></>} />
+    <PageHero eyebrow="For research scholars" title="From research problem to research publication" intro="Our research-support ecosystem helps Ph.D. and research scholars at every stage of the research lifecycle." actions={<ButtonLink href="/contact" variant="accent">Discuss your research</ButtonLink>} />
+    <Section>
+      <SectionHead title="How we help research scholars" />
+      <div className="mt-8"><CheckList items={SCHOLAR_SERVICES} cols={3} /></div>
+      <LinkCards items={[
+        { href: '/services/research-support', title: 'Research support services', text: 'Idea development, literature review, methodology, implementation, results analysis.' },
+        { href: '/services/research-collaboration', title: 'SCI / Scopus collaboration', text: 'Join an ongoing research project with contribution-based authorship.' },
+        { href: '/services/research-publication', title: 'Publish through IJEPA', text: 'Peer-reviewed engineering and technology journal published by BuildSoftTech.' },
+      ]} />
+    </Section>
+    <CtaBand title="Stuck at a stage of your research?" text="Tell us where you are — problem identification, implementation, writing or reviewer response." actions={<ButtonLink href="/contact" variant="accent">Contact us</ButtonLink>} />
   </div>
 );
 
 export const ForInstitutions = () => (
   <div>
-    <PageBanner eyebrow="Institutional Services" title="Services for Colleges & Universities" intro="BuildSoftTech provides customised institutional programs — faculty development, student training, research development and department-level programs." actions={<Link href="/contact" className="button button-primary">Request a Program Proposal</Link>} />
-    <div className="page-body site-container">
-      <div className="domain-grid" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
+    <PageHero eyebrow="Institutional services" title="Programs for colleges & universities" intro="BuildSoftTech provides customised institutional programs — faculty development, student training, research development and department-level programs." actions={<ButtonLink href="/contact" variant="accent">Request a program proposal</ButtonLink>} />
+    <Section>
+      <div className="grid gap-5 md:grid-cols-2">
         {INSTITUTIONAL_PROGRAMS.map((p) => (
-          <div className="domain-card" key={p.title}>
-            <div className="domain-head"><span className="feature-icon"><Icon name={p.icon} size={20} /></span><h3>{p.title}</h3></div>
-            <ul className="checklist is-flush">{p.items.map((i) => <li key={i}>{i}</li>)}</ul>
-          </div>
+          <PaperCard key={p.title}>
+            <h2 className="font-display text-xl font-semibold tracking-tight">{p.title}</h2>
+            <div className="mt-4"><CheckList items={p.items} cols={2} /></div>
+          </PaperCard>
         ))}
       </div>
-      <div className="page-card is-note" style={{ marginTop: 24 }}><p>Programs can be delivered online, offline or in hybrid mode and tailored to your department's curriculum, accreditation goals and research priorities.</p></div>
-    </div>
-    <Cta title="Bring BuildSoftTech to your campus" text="Share your requirements and we will prepare a customised program proposal for your institution." actions={<><Link href="/contact" className="button button-primary">Request a Proposal</Link><Link href="/contact" className="button button-outline">Contact Us</Link></>} />
+      <p className="mt-8 text-sm text-muted-foreground">Programs can be delivered online, offline or in hybrid mode and tailored to your department's curriculum, accreditation goals and research priorities.</p>
+    </Section>
+    <CtaBand title="Bring BuildSoftTech to your campus" text="Share your requirements and we will prepare a customised program proposal for your institution." actions={<ButtonLink href="/contact" variant="accent">Contact us</ButtonLink>} />
   </div>
 );

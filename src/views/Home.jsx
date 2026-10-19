@@ -1,161 +1,221 @@
 import React from 'react';
 import Link from 'next/link';
-import Icon from '../components/Icon';
-import HeroVisual from '../components/HeroVisual';
-import { Features, SectionHeading, Steps } from '../components/shared';
-import AudienceCard from '../components/AudienceCard';
-import { IJEPA } from '../data/site';
+import { ButtonLink, Container, Eyebrow, H2, PaperCard, Section, SectionHead, StepCards, TextLink } from '../components/ui';
+import { IJEPA, SITE } from '../data/site';
 import { CORE_SERVICES, MISSION, WHY_US, WORKFLOW } from '../data/content';
 
-const Fact = ({ icon, title, text }) => (
-  <div className="fact">
-    <span className="fact-icon" aria-hidden="true"><Icon name={icon} size={22} /></span>
-    <div><strong>{title}</strong><small>{text}</small></div>
-  </div>
-);
-
-// Photos: Unsplash (free licence), hot-linked. Swap for the client's own photos in /public when available.
+// Photos: Unsplash (free licence), hot-linked. Replace with the client's own photos when available.
 const UNSPLASH = (id) => `https://images.unsplash.com/${id}?w=900&q=70&auto=format&fit=crop`;
 const AUDIENCES = [
-  { to: '/for-faculty', icon: 'graduation', photo: UNSPLASH('photo-1524178232363-1fb2b075b655'), alt: 'A lecturer presenting to a seminar room', title: 'Faculty Members', sub: 'Research & professional growth', text: 'Publication support, collaboration, research profile development.' },
-  { to: '/for-students', icon: 'user', photo: UNSPLASH('photo-1523240795612-9a054b0db644'), alt: 'Students laughing together over a laptop in a library', title: 'Students', sub: 'Learn · Build · Showcase', text: 'Software training, internships, final-year and mini projects.' },
-  { to: '/for-research-scholars', icon: 'bookOpen', photo: UNSPLASH('photo-1434030216411-0b793f4b4173'), alt: 'A researcher taking handwritten notes at a desk', title: 'Research Scholars', sub: 'Problem to publication', text: 'Literature survey, methodology, implementation, research writing.' },
-  { to: '/for-institutions', icon: 'building', photo: UNSPLASH('photo-1562774053-701939374585'), alt: 'A university building behind a lawn', title: 'Institutions', sub: 'Colleges & universities', text: 'FDPs, bootcamps, research-development and department programs.' },
+  { href: '/for-faculty', photo: UNSPLASH('photo-1524178232363-1fb2b075b655'), alt: 'A lecturer presenting to a seminar room', title: 'Faculty Members', sub: 'Research & professional growth', text: 'Publication support, collaboration, research profile development.' },
+  { href: '/for-students', photo: UNSPLASH('photo-1523240795612-9a054b0db644'), alt: 'Students working together over a laptop in a library', title: 'Students', sub: 'Learn · Build · Showcase', text: 'Software training, internships, final-year and mini projects.' },
+  { href: '/for-research-scholars', photo: UNSPLASH('photo-1434030216411-0b793f4b4173'), alt: 'A researcher taking handwritten notes at a desk', title: 'Research Scholars', sub: 'Problem to publication', text: 'Literature survey, methodology, implementation, research writing.' },
+  { href: '/for-institutions', photo: UNSPLASH('photo-1562774053-701939374585'), alt: 'A university building behind a lawn', title: 'Institutions', sub: 'Colleges & universities', text: 'FDPs, bootcamps, research-development and department programs.' },
 ];
 
-// '45 Days' -> '45-Day' for use as an adjective in headings.
+const CTA_BY_SERVICE = {
+  '/services/research-publication': 'About publication',
+  '/services/research-collaboration': 'Collaborate',
+  '/courses': 'View classes',
+  '/internships': 'Internship details',
+};
+
 const dayLabel = (d = '') => d.replace(/^(\d+)\s*days?$/i, '$1-Day');
 
 const Home = ({ settings }) => {
   const intern = settings?.internship || { fee: '₹3,000/-', duration: '45 Days' };
+  const contact = { ...SITE, ...(settings?.contact || {}) };
+
   return (
-  <div className="landing-page">
-    <section className="site-hero">
-      <div className="site-container hero-grid">
-        <div className="hero-copy">
-          <span className="hero-badge"><span className="dot-live" /> Publisher of {IJEPA.name} · Peer-reviewed · ISSN {IJEPA.issn}</span>
-          <p className="eyebrow">BuildSoftTech</p>
-          <h1>Research. Publish.<br /><em>Learn. Innovate.</em></h1>
-          <p className="hero-sub">Professional Research Publication, Research Collaboration, Internship &amp; Technology Training Services</p>
-          <p className="hero-description">BuildSoftTech empowers researchers, academicians and students with ethical research support, publication assistance, collaborative research opportunities, practical internships and industry-oriented technology training.</p>
-          <div className="hero-actions">
-            <Link href="/services" className="button button-primary">Explore Our Services <span>→</span></Link>
-            <Link href="/contact" className="button button-outline">Contact Us</Link>
-          </div>
+    <div>
+      {/* Hero */}
+      <section className="border-b border-border bg-primary text-primary-foreground">
+        <div className="hero-grid-bg">
+          <Container className="grid items-center gap-10 py-16 lg:grid-cols-2 lg:py-24">
+            <div>
+              <Eyebrow tone="accent">BuildSoftTech · Publisher of IJEPA</Eyebrow>
+              <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
+                Research. Publish. Learn. Innovate.
+              </h1>
+              <p className="mt-4 text-base font-medium opacity-90">
+                Professional Research Publication, Research Collaboration, Internship &amp; Technology Training Services
+              </p>
+              <p className="mt-4 max-w-lg text-base leading-relaxed opacity-85">
+                BuildSoftTech empowers researchers, academicians and students with ethical research support, publication assistance, collaborative research opportunities, practical internships and industry-oriented technology training.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <ButtonLink href="/services" variant="accent">Explore our services</ButtonLink>
+                <ButtonLink href={IJEPA.url} variant="outline-light">Visit the IJEPA journal ↗</ButtonLink>
+              </div>
+              <p className="mt-6 text-sm opacity-70">
+                Questions?{' '}
+                <a href={`mailto:${contact.email}`} className="underline underline-offset-2">{contact.email}</a>
+                {' · '}
+                <a href={`tel:${contact.phoneLink}`} className="underline underline-offset-2">{contact.phoneDisplay}</a>
+              </p>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-primary-foreground/15 shadow-lg">
+              <img src="/hero.jpg" alt="Students and researchers working together over a laptop and printed journals" width={1536} height={1024} className="h-full w-full object-cover" />
+            </div>
+          </Container>
         </div>
-        <HeroVisual />
-      </div>
-    </section>
+      </section>
 
-    <section className="site-facts">
-      <div className="site-container facts-grid">
-        <Fact icon="shieldCheck" title="Ethical Research Support" text="Originality, integrity, transparency" />
-        <Fact icon="fileText" title="Peer-Reviewed Publishing" text={`Through ${IJEPA.name} · ISSN ${IJEPA.issn}`} />
-        <Fact icon="users" title="SCI / Scopus Collaboration" text="Contribution-based authorship" />
-        <Fact icon="briefcase" title={`${dayLabel(intern.duration)} Internships`} text={`Project-based, certified, ${intern.fee}`} />
-        <Fact icon="code" title="Hands-on Training" text="Python, AI/ML, Full Stack, Cloud" />
-      </div>
-    </section>
-
-    <div className="site-container">
-      <section className="content-section" aria-labelledby="home-services">
-        <SectionHeading eyebrow="What we do" title="Our Core Services" id="home-services" text="Four verticals, one objective: bridge the gap between research, academic requirements and industry-oriented technology skills." link="/services" linkLabel="View all services" />
-        <div className="card-grid cols-4">
+      {/* Services */}
+      <Section>
+        <Eyebrow>What we do</Eyebrow>
+        <H2 className="mt-2">Our core services</H2>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+          Four verticals, one objective: bridge the gap between research, academic requirements and industry-oriented technology skills.
+        </p>
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {CORE_SERVICES.map((s, i) => (
-            <Link href={s.to} className="service-card" key={s.to}>
-              <span className="service-num" aria-hidden="true">0{i + 1}</span>
-              <span className="service-icon"><Icon name={s.icon} size={24} /></span>
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
-              <span className="section-link">Learn More →</span>
+            <Link key={s.to} href={s.to} className="paper-card group rounded-xl p-6 transition-transform hover:-translate-y-0.5">
+              <span className="font-display text-sm font-semibold text-accent">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-foreground">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+              <span className="mt-4 inline-block text-sm font-semibold text-primary group-hover:underline">{CTA_BY_SERVICE[s.to] || 'Learn more'} →</span>
             </Link>
           ))}
         </div>
+      </Section>
+
+      {/* About strip */}
+      <section className="border-y border-border bg-secondary">
+        <Container className="py-14">
+          <div className="grid gap-10 md:grid-cols-2">
+            <div>
+              <h2 className="font-display text-3xl font-semibold tracking-tight">About BuildSoftTech</h2>
+              <p className="mt-2 font-display text-lg text-primary">Building Research. Developing Skills. Creating Opportunities.</p>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                BuildSoftTech is a professional research and technology services organization dedicated to supporting researchers, faculty members, Ph.D. scholars, postgraduate and undergraduate students and academic institutions through ethical research publication support, collaborative research opportunities, software training, internships and technology skill development.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Our objective is to bridge the gap between research, academic requirements and industry-oriented technology skills through structured, transparent and quality-focused services.
+              </p>
+              <TextLink href="/about" className="mt-4 inline-block text-sm font-semibold">More about us →</TextLink>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Our mission</p>
+              <ul className="mt-4 space-y-3">
+                {MISSION.slice(0, 5).map((m) => (
+                  <li key={m} className="flex gap-3 text-sm leading-relaxed text-foreground">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                    {m}
+                  </li>
+                ))}
+              </ul>
+              <TextLink href="/about#mission" className="mt-4 inline-block text-sm font-semibold">Vision &amp; full mission →</TextLink>
+            </div>
+          </div>
+        </Container>
       </section>
 
-      <section className="content-section about-scope">
-        <div className="about-copy about-panel">
-          <p className="eyebrow accent">About BuildSoftTech</p>
-          <h2>Building Research. Developing Skills. Creating Opportunities.</h2>
-          <p><strong>BuildSoftTech</strong> is a professional research and technology services organization dedicated to supporting researchers, faculty members, Ph.D. scholars, postgraduate and undergraduate students and academic institutions through ethical research publication support, collaborative research opportunities, software training, internships and technology skill development.</p>
-          <p>Our objective is to bridge the gap between research, academic requirements and industry-oriented technology skills through structured, transparent and quality-focused services.</p>
-          <Link href="/about" className="button button-primary button-small">Learn More&nbsp; →</Link>
+      {/* Who we serve */}
+      <Section>
+        <SectionHead eyebrow="Who we serve" title="Built for the academic community" text="Services designed around the needs of each group we work with." />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {AUDIENCES.map((a) => (
+            <Link key={a.href} href={a.href} className="paper-card group overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5">
+              <div className="aspect-[16/10] overflow-hidden bg-secondary">
+                <img src={a.photo} alt={a.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+              </div>
+              <div className="p-5">
+                <h3 className="font-display text-lg font-semibold tracking-tight">{a.title}</h3>
+                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-accent">{a.sub}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{a.text}</p>
+              </div>
+            </Link>
+          ))}
         </div>
-        <div className="scope-panel">
-          <p className="eyebrow accent">Our Mission</p>
-          <h2>What we stand for</h2>
-          <ul>{MISSION.slice(0, 5).map((m) => { const t = m.replace(/^To /, ''); return <li key={m}>{t[0].toUpperCase() + t.slice(1)}</li>; })}</ul>
-          <Link href="/about#mission" className="button button-light button-small">Vision &amp; Mission&nbsp; →</Link>
+      </Section>
+
+      {/* IJEPA */}
+      <section className="border-y border-border bg-primary text-primary-foreground">
+        <div className="hero-grid-bg">
+          <Container className="grid items-center gap-8 py-14 md:grid-cols-[auto_1fr_auto]">
+            <img src="/logo.png" alt="" width="64" height="64" className="h-16 w-16 rounded-full bg-white" />
+            <div>
+              <Eyebrow tone="accent">Our journal</Eyebrow>
+              <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">Research Paper Publication — IJEPA</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed opacity-85">
+                Publish your original research through IJEPA, a dedicated platform for engineering, technology and interdisciplinary research. BuildSoftTech provides manuscript formatting, submission guidance, peer-review coordination and publication-process support.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <ButtonLink href={IJEPA.url} variant="outline-light">Visit IJEPA ↗</ButtonLink>
+              <ButtonLink href={IJEPA.submitUrl} variant="accent">Submit your paper</ButtonLink>
+            </div>
+          </Container>
         </div>
       </section>
 
-      <section className="content-section" aria-labelledby="home-audiences">
-        <SectionHeading eyebrow="Who we serve" title="Built for the Academic Community" id="home-audiences" text="Services designed around the needs of each group we work with." />
-        <div className="audience-grid">
-          {AUDIENCES.map((a) => <AudienceCard key={a.to} href={a.to} {...a} />)}
-        </div>
-      </section>
-    </div>
+      {/* Workflow */}
+      <Section>
+        <SectionHead eyebrow="How we work" title="Our research publication workflow" text="A structured, transparent path from the first conversation to publication." />
+        <div className="mt-10"><StepCards items={WORKFLOW} cols={3} /></div>
+      </Section>
 
-    <section className="callout">
-      <div className="site-container callout-inner">
-        <div className="callout-icon"><img src="/logo.png" alt="" /></div>
-        <div>
-          <h2>Research Paper Publication — {IJEPA.name}</h2>
-          <p>Publish your original research through {IJEPA.name}, a dedicated platform for engineering, technology and interdisciplinary research. BuildSoftTech provides manuscript formatting, submission guidance, peer-review coordination and publication-process support.</p>
-        </div>
-        <div className="callout-actions">
-          <a href={IJEPA.url} target="_blank" rel="noreferrer" className="button button-outline">Visit {IJEPA.name} ↗</a>
-          <a href={IJEPA.submitUrl} target="_blank" rel="noreferrer" className="button button-primary">Submit Your Paper</a>
-        </div>
-      </div>
-    </section>
-
-    <div className="site-container">
-      <section className="content-section" aria-labelledby="home-workflow">
-        <SectionHeading eyebrow="How we work" title="Our Research Publication Workflow" id="home-workflow" text="A structured, transparent path from the first conversation to publication." link="/services/research-support" linkLabel="Research support services" />
-        <Steps items={WORKFLOW} cols={3} />
-      </section>
-
-      <section className="content-section" aria-labelledby="home-internship">
-        <div className="promo-panel">
+      {/* Internship */}
+      <section className="border-y border-border bg-secondary">
+        <Container className="grid items-center gap-8 py-14 md:grid-cols-[1fr_auto]">
           <div>
-            <p className="eyebrow accent">Paid Internship Program</p>
-            <h2 id="home-internship" className="promo-title">{dayLabel(intern.duration)} Internship <span className="promo-price">{intern.fee}</span></h2>
-            {intern.nextBatch && <p className="promo-batch">Next batch: {intern.nextBatch}</p>}
-            <p>Get {intern.duration.toLowerCase()} of practical technology training, hands-on project experience, mentor guidance and an Internship Completion Certificate. Choose from AI/ML, Data Science, Python, Web Development, Full Stack, Cybersecurity, Cloud, IoT and other emerging technologies.</p>
+            <Eyebrow>Paid internship program</Eyebrow>
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">
+              {dayLabel(intern.duration)} Internship <span className="text-accent">· {intern.fee}</span>
+            </h2>
+            {intern.nextBatch && <p className="mt-2 text-sm font-semibold text-primary">Next batch: {intern.nextBatch}</p>}
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Get 45 days of practical technology training, hands-on project experience, mentor guidance and an Internship Completion Certificate. Choose from AI/ML, Data Science, Python, Web Development, Full Stack, Cybersecurity, Cloud, IoT and other emerging technologies.
+            </p>
           </div>
-          <div className="hero-actions">
-            <Link href="/internships" className="button button-primary">Program Details →</Link>
-            <Link href="/contact" className="button button-light">Apply Now</Link>
+          <div className="flex flex-wrap gap-3">
+            <ButtonLink href="/internships" variant="primary">Program details</ButtonLink>
+            <ButtonLink href="/internships#apply" variant="outline">Apply now</ButtonLink>
           </div>
-        </div>
+        </Container>
       </section>
 
-      <section className="content-section is-last" aria-labelledby="home-why">
-        <SectionHeading eyebrow="Why choose BuildSoftTech" title="Why Researchers &amp; Students Choose Us" id="home-why" />
-        <Features items={WHY_US.slice(0, 6)} />
+      {/* Why us */}
+      <Section>
+        <SectionHead eyebrow="Why BuildSoftTech" title="Why researchers & students choose us" />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {WHY_US.slice(0, 6).map((w) => (
+            <PaperCard key={w.title}>
+              <h3 className="font-display text-lg font-semibold tracking-tight">{w.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{w.text}</p>
+            </PaperCard>
+          ))}
+        </div>
+      </Section>
+
+      {/* Contact */}
+      <section id="contact" className="border-t border-border bg-secondary">
+        <Container className="grid gap-10 py-16 md:grid-cols-2">
+          <div>
+            <h2 className="font-display text-3xl font-semibold tracking-tight">Have a research idea or want to develop a new skill?</h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
+              Let's turn your research idea into meaningful research and your learning goals into practical skills. Write to us or call the office.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <ButtonLink href="/contact" variant="primary">Contact us</ButtonLink>
+              <ButtonLink href="/services" variant="outline">Explore our services</ButtonLink>
+            </div>
+          </div>
+          <PaperCard>
+            <ul className="space-y-3 text-sm">
+              <li><span className="font-semibold text-foreground">Email: </span><a href={`mailto:${contact.email}`} className="text-primary hover:underline">{contact.email}</a></li>
+              <li><span className="font-semibold text-foreground">Phone: </span><a href={`tel:${contact.phoneLink}`} className="text-primary hover:underline">{contact.phoneDisplay}</a></li>
+              <li><span className="font-semibold text-foreground">Office: </span><span className="text-muted-foreground">{contact.address}</span></li>
+              <li><span className="font-semibold text-foreground">Journal portal: </span><a href={IJEPA.url} target="_blank" rel="noreferrer" className="text-primary hover:underline">ijepa.vercel.app ↗</a></li>
+            </ul>
+            <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+              Verify before you publish: we encourage researchers to check a journal's current indexing and coverage status directly with the indexing service (for example, Scopus source lists) rather than relying on claims made by any service provider. <Link href="/research-ethics" className="text-primary hover:underline">Our integrity commitment</Link>.
+            </p>
+          </PaperCard>
+        </Container>
       </section>
     </div>
-
-    <section className="callout is-centered is-flush">
-      <div className="site-container callout-inner">
-        <div>
-          <h2>Have a Research Idea or Want to Develop a New Skill?</h2>
-          <p>Let's turn your research idea into meaningful research and your learning goals into practical skills.</p>
-        </div>
-        <div className="callout-actions">
-          <Link href="/contact" className="button button-primary">Contact Us</Link>
-          <Link href="/services" className="button button-outline">Explore Our Services</Link>
-        </div>
-      </div>
-    </section>
-
-    <section className="strip site-container">
-      <div><h2>Verify before you publish</h2><p>We encourage researchers to verify a journal's current indexing and coverage status directly with the indexing service (for example, Scopus source lists) rather than relying on claims made by any service provider.</p></div>
-      <Link href="/research-ethics" className="strip-note">Our research-integrity commitment →</Link>
-    </section>
-  </div>
   );
 };
 

@@ -1,15 +1,14 @@
 import React from 'react';
-import Link from 'next/link';
-import { Cta, Faq, PageBanner } from '../components/shared';
+import { ButtonLink, CtaBand, Faq, PageHero, Section } from '../components/ui';
 import { FAQS } from '../data/content';
 
 const FaqPage = () => (
   <div>
-    <PageBanner eyebrow="Help" title="Frequently Asked Questions" intro="Straight answers about what we do — and what we never promise." />
-    <div className="page-body site-container">
+    <PageHero eyebrow="Help" title="Frequently asked questions" intro="Straight answers about what we do — and what we never promise." />
+    <Section className="max-w-4xl">
       <Faq items={FAQS} />
-    </div>
-    <Cta title="Still have a question?" text="Write to us or call our office and we will get back to you within 2–3 business days." actions={<><Link href="/contact" className="button button-primary">Contact Us</Link><Link href="/services" className="button button-outline">Explore Services</Link></>} />
+    </Section>
+    <CtaBand title="Still have a question?" text="Write to us or call the office and we will get back to you within 2–3 business days." actions={<><ButtonLink href="/contact" variant="accent">Contact us</ButtonLink><ButtonLink href="/services" variant="outline-light">Explore services</ButtonLink></>} />
   </div>
 );
 

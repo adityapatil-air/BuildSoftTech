@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { PageBanner } from '../components/shared';
+import { PageHero } from '../components/ui';
 import { DISCLAIMER, IJEPA, SITE } from '../data/site';
 import { INTEGRITY_NO, INTEGRITY_YES } from '../data/content';
 
@@ -9,10 +9,10 @@ import { INTEGRITY_NO, INTEGRITY_YES } from '../data/content';
 
 const Policy = ({ title, eyebrow = 'Important Policies', intro, children }) => (
   <div>
-    <PageBanner eyebrow={eyebrow} title={title} intro={intro} />
-    <div className="page-body site-container" style={{ maxWidth: 'min(900px, 90%)' }}>
+    <PageHero eyebrow={eyebrow} title={title} intro={intro} />
+    <div className="policy-prose mx-auto max-w-3xl px-4 py-14 sm:px-6">
       {children}
-      <p style={{ fontSize: 12, marginTop: 28 }}>Last updated: October 2026. Questions about this policy: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+      <p className="policy-updated">Last updated: October 2026. Questions about this policy: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
     </div>
   </div>
 );
