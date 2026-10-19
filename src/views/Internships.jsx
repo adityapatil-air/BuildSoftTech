@@ -4,7 +4,10 @@ import Icon from '../components/Icon';
 import { Cta, Features, PageBanner, Steps } from '../components/shared';
 import { INTERNSHIP_DOMAINS, INTERNSHIP_ELIGIBLE, INTERNSHIP_GAINS, INTERNSHIP_HIGHLIGHTS, INTERNSHIP_INCLUDES, INTERNSHIP_TIMELINE } from '../data/content';
 
-const Internships = () => (
+const Internships = ({ settings }) => {
+  const it = settings?.internship || {};
+  const highlights = INTERNSHIP_HIGHLIGHTS.map(([k, v]) => [k, k === 'Fee' ? it.fee : k === 'Duration' ? it.duration : k === 'Mode' ? it.mode : v]);
+  return (
   <div>
     <PageBanner
       eyebrow="Paid Internship & Project Experience Program"
@@ -17,11 +20,13 @@ const Internships = () => (
       <div className="price-hero">
         <div>
           <p className="eyebrow accent">Internship Fee</p>
-          <div className="price">₹3,000/- <small>Duration: 45 Days</small></div>
+          <div className="price">{it.fee} <small>Duration: {it.duration}</small></div>
           <p>The program combines guided technical training + hands-on practice + project development + mentor support + internship certification.</p>
+          {it.nextBatch && <p><strong style={{ color: 'var(--brown)' }}>Next batch:</strong> {it.nextBatch}</p>}
+          {it.note && <p>{it.note}</p>}
         </div>
         <div className="price-items">
-          <div><strong>45</strong><span>Days</span></div>
+          <div><strong>{it.duration}</strong><span>Duration</span></div>
           <div><strong>1</strong><span>Guided project</span></div>
           <div><strong>Certificate</strong><span>On completion</span></div>
         </div>
@@ -52,7 +57,7 @@ const Internships = () => (
         <div className="table-wrap">
           <table className="data-table is-compact">
             <thead><tr><th>Feature</th><th>Details</th></tr></thead>
-            <tbody>{INTERNSHIP_HIGHLIGHTS.map(([f, d]) => <tr key={f}><td><strong>{f}</strong></td><td>{d}</td></tr>)}</tbody>
+            <tbody>{highlights.map(([f, d]) => <tr key={f}><td><strong>{f}</strong></td><td>{d}</td></tr>)}</tbody>
           </table>
         </div>
         <div>
@@ -68,10 +73,11 @@ const Internships = () => (
 
     <Cta
       title="Start Your 45-Day Practical Learning Journey"
-      text="Gain technical skills. Build a project. Get practical experience. Earn your internship certificate. Internship Fee: ₹3,000/-"
+      text={`Gain technical skills. Build a project. Get practical experience. Earn your internship certificate. Internship Fee: ${it.fee}`}
       actions={<><Link href="/contact" className="button button-primary">Apply for Internship</Link><a href="#domains" className="button button-outline">View Internship Domains</a></>}
     />
   </div>
-);
+  );
+};
 
 export default Internships;

@@ -2,7 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import { DISCLAIMER, IJEPA, SITE } from '../data/site';
 
-const Footer = () => (
+const Footer = ({ contact }) => {
+  const c = { ...SITE, ...(contact || {}) };
+  return (
   <footer className="site-footer">
     <div className="footer-grid site-container">
       <div className="footer-about">
@@ -39,18 +41,19 @@ const Footer = () => (
       </div>
       <div>
         <h3>Contact</h3>
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-        <a href={`tel:${SITE.phoneLink}`}>{SITE.phoneDisplay}</a>
-        <span>Shop No 2, Snehankit Colony,<br />Karve Nagar, Pune-411052, India</span>
+        <a href={`mailto:${c.email}`}>{c.email}</a>
+        <a href={`tel:${c.phoneLink}`}>{c.phoneDisplay}</a>
+        <span>{c.address}</span>
         <a href={IJEPA.url} target="_blank" rel="noreferrer">{IJEPA.name} — {IJEPA.fullName} ↗</a>
       </div>
     </div>
     <div className="footer-disclaimer site-container"><strong>Disclaimer:</strong> {DISCLAIMER}</div>
     <div className="copyright site-container">
       <span>© {new Date().getFullYear()} BuildSoftTech. All rights reserved. Publisher of {IJEPA.name} (ISSN {IJEPA.issn}).</span>
-      <span><Link href="/privacy-policy">Privacy Policy</Link> &nbsp; | &nbsp; <Link href="/terms">Terms &amp; Conditions</Link> &nbsp; | &nbsp; <Link href="/disclaimer">Disclaimer</Link></span>
+      <span><Link href="/privacy-policy">Privacy Policy</Link> &nbsp; | &nbsp; <Link href="/terms">Terms &amp; Conditions</Link> &nbsp; | &nbsp; <Link href="/disclaimer">Disclaimer</Link> &nbsp; | &nbsp; <Link href="/admin">Admin</Link></span>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;

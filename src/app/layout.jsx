@@ -3,6 +3,7 @@ import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BackToTop from '../components/BackToTop';
+import { getSettings } from '../lib/store';
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800', '900'], display: 'swap' });
 
@@ -23,17 +24,20 @@ export const metadata = {
   robots: { index: true, follow: true },
 };
 
+export const dynamic = 'force-dynamic';
+
 export const viewport = { themeColor: '#3f1e0c', width: 'device-width', initialScale: 1 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const { contact } = await getSettings();
   return (
     <html lang="en" className={inter.className}>
       <body>
         <div className="app-shell">
           <a href="#main-content" className="skip-link">Skip to main content</a>
-          <Header />
+          <Header contact={contact} />
           <main id="main-content" tabIndex={-1}>{children}</main>
-          <Footer />
+          <Footer contact={contact} />
           <BackToTop />
         </div>
       </body>

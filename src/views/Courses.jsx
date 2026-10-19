@@ -2,9 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import Icon from '../components/Icon';
 import { Cta, PageBanner } from '../components/shared';
-import { COURSES } from '../data/content';
 
-const Courses = () => (
+const Courses = ({ settings }) => {
+  const courses = settings?.courses || [];
+  return (
   <div>
     <PageBanner
       eyebrow="Service 04 · Software Training"
@@ -17,10 +18,11 @@ const Courses = () => (
 
       <h2>Popular Training Programs</h2>
       <div className="domain-grid">
-        {COURSES.map((c) => (
+        {courses.map((c) => (
           <div className="domain-card" key={c.title}>
-            <div className="domain-head"><span className="feature-icon"><Icon name={c.icon} size={20} /></span><h3>{c.title}</h3></div>
-            <ul className="checklist is-flush">{c.items.map((i) => <li key={i}>{i}</li>)}</ul>
+            <div className="domain-head"><span className="feature-icon"><Icon name={c.icon || 'code'} size={20} /></span><h3>{c.title}</h3></div>
+            {(c.fee || c.duration) && <p className="course-meta">{[c.duration, c.fee].filter(Boolean).join(' · ')}</p>}
+            <ul className="checklist is-flush">{(c.items || []).map((i) => <li key={i}>{i}</li>)}</ul>
             <div className="row-actions" style={{ marginTop: 16 }}><Link href="/contact" className="button button-light button-small">Ask about this course →</Link></div>
           </div>
         ))}
@@ -37,6 +39,7 @@ const Courses = () => (
     </div>
     <Cta title="Ready to build a new skill?" text="Tell us which technology you want to learn and we will suggest the right program and batch." actions={<><Link href="/contact" className="button button-primary">Join Training</Link><Link href="/contact" className="button button-outline">Contact Us</Link></>} />
   </div>
-);
+  );
+};
 
 export default Courses;

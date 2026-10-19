@@ -1,5 +1,7 @@
 import Page from '../views/Home';
+import { getSettings } from '../lib/store';
 
-export default function Route() {
-  return <Page />;
+export default async function Route() {
+  const settings = await getSettings();
+  return <Page settings={settings} />;
 }

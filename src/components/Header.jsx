@@ -45,7 +45,8 @@ const Dropdown = ({ label, items, isOpen, onToggle, onNavigate, pathname }) => {
   );
 };
 
-const Header = () => {
+const Header = ({ contact }) => {
+  const email = contact?.email || SITE.email;
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -90,7 +91,7 @@ const Header = () => {
           <span className="institutional-extra">&nbsp;|&nbsp; Publisher of {IJEPA.name} · ISSN {IJEPA.issn}</span>
         </div>
         <div className="institutional-links">
-          <a className="hide-mobile" href={`mailto:${SITE.email}`}><Icon name="mail" size={13} /> {SITE.email}</a>
+          <a className="hide-mobile" href={`mailto:${email}`}><Icon name="mail" size={13} /> {email}</a>
           <a href={IJEPA.url} target="_blank" rel="noreferrer">{IJEPA.name} Journal <Icon name="arrowUpRight" size={13} /></a>
         </div>
       </div>

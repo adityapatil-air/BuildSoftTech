@@ -1,11 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
 import { Cta, Flow, PageBanner } from '../components/shared';
-import { COLLAB_DISCLAIMER, COLLAB_FLOW, COLLAB_INCLUDES, COLLAB_TOPICS, PACKAGES } from '../data/content';
+import { COLLAB_DISCLAIMER, COLLAB_FLOW, COLLAB_INCLUDES, PACKAGES } from '../data/content';
 
 const statusTag = (s) => (s === 'Available' ? 'is-success' : s === 'Reserved' ? 'is-warning' : 'is-danger');
 
-const ResearchCollaboration = () => (
+const ResearchCollaboration = ({ settings }) => {
+  const topics = settings?.topics || [];
+  const packages = PACKAGES.map((p) => ({ ...p, ...(settings?.packages || []).find((x) => x.letter === p.letter) }));
+  return (
   <div>
     <PageBanner
       eyebrow="Service 02 · SCI / Scopus Research"
@@ -28,16 +31,16 @@ const ResearchCollaboration = () => (
         <table className="data-table">
           <thead><tr><th>Sr. No.</th><th>Research Paper / Proposed Topic</th><th>Research Area</th><th>Target Index</th><th>Collaboration Duration</th><th>Professional Fee</th><th>Status</th><th></th></tr></thead>
           <tbody>
-            {COLLAB_TOPICS.map((t) => (
-              <tr key={t.id}>
-                <td>{t.id}</td>
+            {topics.map((t, i) => (
+              <tr key={i}>
+                <td>{i + 1}</td>
                 <td><strong>{t.title}</strong></td>
                 <td>{t.area}</td>
                 <td><span className="tag">{t.index}</span></td>
                 <td>{t.duration}</td>
                 <td>{t.fee}</td>
                 <td><span className={`tag ${statusTag(t.status)}`}>{t.status}</span></td>
-                <td><Link href="/contact" className="button button-primary button-small">Apply Now</Link></td>
+                <td>{t.status === 'Available' ? <Link href="/contact" className="button button-primary button-small">Apply Now</Link> : <span className="form-hint">Not open</span>}</td>
               </tr>
             ))}
           </tbody>
@@ -52,7 +55,7 @@ const ResearchCollaboration = () => (
 
       <h2>Collaboration Packages</h2>
       <div className="package-grid">
-        {PACKAGES.map((p) => (
+        {packages.map((p) => (
           <div className={`package ${p.featured ? 'is-featured' : ''}`} key={p.letter}>
             {p.featured && <span className="package-ribbon">Most chosen</span>}
             <span className="package-letter">{p.letter}</span>
@@ -81,6 +84,7 @@ const ResearchCollaboration = () => (
 
     <Cta title="Interested in a Research Collaboration?" text="Browse available research topics → select a topic → submit your interest → our research coordinator will contact you." actions={<><Link href="/contact" className="button button-primary">Submit Your Interest</Link><a href="#topics" className="button button-outline">Browse Topics</a></>} />
   </div>
-);
+  );
+};
 
 export default ResearchCollaboration;

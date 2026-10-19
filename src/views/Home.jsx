@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Icon from '../components/Icon';
 import HeroVisual from '../components/HeroVisual';
 import { Features, SectionHeading, Steps } from '../components/shared';
+import AudienceCard from '../components/AudienceCard';
 import { IJEPA } from '../data/site';
 import { CORE_SERVICES, MISSION, WHY_US, WORKFLOW } from '../data/content';
 
@@ -13,14 +14,21 @@ const Fact = ({ icon, title, text }) => (
   </div>
 );
 
+// Photos: Unsplash (free licence), hot-linked. Swap for the client's own photos in /public when available.
+const UNSPLASH = (id) => `https://images.unsplash.com/${id}?w=900&q=70&auto=format&fit=crop`;
 const AUDIENCES = [
-  { to: '/for-faculty', icon: 'graduation', title: 'Faculty Members', sub: 'Research & professional growth', text: 'Publication support, collaboration, research profile development.' },
-  { to: '/for-students', icon: 'user', title: 'Students', sub: 'Learn · Build · Showcase', text: 'Software training, internships, final-year and mini projects.' },
-  { to: '/for-research-scholars', icon: 'bookOpen', title: 'Research Scholars', sub: 'Problem to publication', text: 'Literature survey, methodology, implementation, research writing.' },
-  { to: '/for-institutions', icon: 'building', title: 'Institutions', sub: 'Colleges & universities', text: 'FDPs, bootcamps, research-development and department programs.' },
+  { to: '/for-faculty', icon: 'graduation', photo: UNSPLASH('photo-1524178232363-1fb2b075b655'), alt: 'A lecturer presenting to a seminar room', title: 'Faculty Members', sub: 'Research & professional growth', text: 'Publication support, collaboration, research profile development.' },
+  { to: '/for-students', icon: 'user', photo: UNSPLASH('photo-1523240795612-9a054b0db644'), alt: 'Students laughing together over a laptop in a library', title: 'Students', sub: 'Learn · Build · Showcase', text: 'Software training, internships, final-year and mini projects.' },
+  { to: '/for-research-scholars', icon: 'bookOpen', photo: UNSPLASH('photo-1434030216411-0b793f4b4173'), alt: 'A researcher taking handwritten notes at a desk', title: 'Research Scholars', sub: 'Problem to publication', text: 'Literature survey, methodology, implementation, research writing.' },
+  { to: '/for-institutions', icon: 'building', photo: UNSPLASH('photo-1562774053-701939374585'), alt: 'A university building behind a lawn', title: 'Institutions', sub: 'Colleges & universities', text: 'FDPs, bootcamps, research-development and department programs.' },
 ];
 
-const Home = () => (
+// '45 Days' -> '45-Day' for use as an adjective in headings.
+const dayLabel = (d = '') => d.replace(/^(\d+)\s*days?$/i, '$1-Day');
+
+const Home = ({ settings }) => {
+  const intern = settings?.internship || { fee: '₹3,000/-', duration: '45 Days' };
+  return (
   <div className="landing-page">
     <section className="site-hero">
       <div className="site-container hero-grid">
@@ -44,7 +52,7 @@ const Home = () => (
         <Fact icon="shieldCheck" title="Ethical Research Support" text="Originality, integrity, transparency" />
         <Fact icon="fileText" title="Peer-Reviewed Publishing" text={`Through ${IJEPA.name} · ISSN ${IJEPA.issn}`} />
         <Fact icon="users" title="SCI / Scopus Collaboration" text="Contribution-based authorship" />
-        <Fact icon="briefcase" title="45-Day Internships" text="Project-based, certified, ₹3,000/-" />
+        <Fact icon="briefcase" title={`${dayLabel(intern.duration)} Internships`} text={`Project-based, certified, ${intern.fee}`} />
         <Fact icon="code" title="Hands-on Training" text="Python, AI/ML, Full Stack, Cloud" />
       </div>
     </section>
@@ -84,12 +92,7 @@ const Home = () => (
       <section className="content-section" aria-labelledby="home-audiences">
         <SectionHeading eyebrow="Who we serve" title="Built for the Academic Community" id="home-audiences" text="Services designed around the needs of each group we work with." />
         <div className="audience-grid">
-          {AUDIENCES.map((a) => (
-            <Link href={a.to} className="audience-card" key={a.to}>
-              <span className="audience-avatar"><Icon name={a.icon} size={28} /></span>
-              <strong>{a.title}</strong><span>{a.sub}</span><small>{a.text}</small>
-            </Link>
-          ))}
+          {AUDIENCES.map((a) => <AudienceCard key={a.to} href={a.to} {...a} />)}
         </div>
       </section>
     </div>
@@ -118,8 +121,9 @@ const Home = () => (
         <div className="promo-panel">
           <div>
             <p className="eyebrow accent">Paid Internship Program</p>
-            <h2 id="home-internship" className="promo-title">45-Day Internship <span className="promo-price">₹3,000/-</span></h2>
-            <p>Get 45 days of practical technology training, hands-on project experience, mentor guidance and an Internship Completion Certificate. Choose from AI/ML, Data Science, Python, Web Development, Full Stack, Cybersecurity, Cloud, IoT and other emerging technologies.</p>
+            <h2 id="home-internship" className="promo-title">{dayLabel(intern.duration)} Internship <span className="promo-price">{intern.fee}</span></h2>
+            {intern.nextBatch && <p className="promo-batch">Next batch: {intern.nextBatch}</p>}
+            <p>Get {intern.duration.toLowerCase()} of practical technology training, hands-on project experience, mentor guidance and an Internship Completion Certificate. Choose from AI/ML, Data Science, Python, Web Development, Full Stack, Cybersecurity, Cloud, IoT and other emerging technologies.</p>
           </div>
           <div className="hero-actions">
             <Link href="/internships" className="button button-primary">Program Details →</Link>
@@ -152,6 +156,7 @@ const Home = () => (
       <Link href="/research-ethics" className="strip-note">Our research-integrity commitment →</Link>
     </section>
   </div>
-);
+  );
+};
 
 export default Home;
