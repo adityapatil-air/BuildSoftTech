@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import Link from 'next/link';
 import Icon from './Icon';
-import { SITE, whatsappLink } from '../data/site';
+
+// Server-safe building blocks (no hooks). Interactive pieces live in their own client files.
 
 // ---- Page banner used by every inner page (mirrors IJEPA's .page-banner) ----
 export const PageBanner = ({ eyebrow, title, intro, crumbs = [], actions }) => (
   <section className="page-banner">
     <div className="site-container">
       <p className="breadcrumb">
-        <Link to="/">Home</Link>
+        <Link href="/">Home</Link>
         {crumbs.map((c, i) => (
-          <React.Fragment key={i}> / {c.to ? <Link to={c.to}>{c.label}</Link> : c.label}</React.Fragment>
+          <React.Fragment key={i}> / {c.href ? <Link href={c.href}>{c.label}</Link> : c.label}</React.Fragment>
         ))}
         {' / '}{title}
       </p>
@@ -30,7 +31,7 @@ export const SectionHeading = ({ eyebrow, title, text, link, linkLabel, id }) =>
       <h2 id={id}>{title}</h2>
       {text && <p>{text}</p>}
     </div>
-    {link && <Link to={link} className="section-link">{linkLabel || 'Learn more'} →</Link>}
+    {link && <Link href={link} className="section-link">{linkLabel || 'Learn more'} →</Link>}
   </div>
 );
 
@@ -67,7 +68,7 @@ export const Features = ({ items, cols = 3 }) => (
   </div>
 );
 
-// ---- FAQ accordion ----
+// ---- FAQ accordion (native <details>, no JS needed) ----
 export const Faq = ({ items }) => (
   <div className="faq-list">
     {items.map((q, i) => (
@@ -88,78 +89,3 @@ export const Cta = ({ title, text, actions, centered = true, flush = false }) =>
     </div>
   </section>
 );
-
-export const WhatsAppButton = ({ text, label = 'Contact Us on WhatsApp', className = '' }) => (
-  <a className={`button button-whatsapp ${className}`} href={whatsappLink(text)} target="_blank" rel="noreferrer">
-    <Icon name="whatsapp" size={16} /> {label}
-  </a>
-);
-
-export const WhatsAppFab = () => (
-  <a className="whatsapp-fab" href={whatsappLink(`Hello BuildSoftTech, I would like to know more about your services.`)} target="_blank" rel="noreferrer" aria-label={`Chat on WhatsApp: ${SITE.phoneDisplay}`}>
-    <Icon name="whatsapp" size={20} /> <span>WhatsApp</span>
-  </a>
-);
-
-// ---- Scroll to top on route change ----
-export const ScrollToTop = () => {
-  const { pathname, hash } = useLocation();
-  useEffect(() => {
-    if (hash) {
-      const el = document.querySelector(hash);
-      if (el) { el.scrollIntoView({ block: 'start' }); return; }
-    }
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, [pathname, hash]);
-  return null;
-};
-
-// ---- Back to top button ----
-export const BackToTop = () => {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 300);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  if (!visible) return null;
-  return (
-    <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="back-to-top-btn" aria-label="Back to top">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M7 14l5-5 5 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-    </button>
-  );
-};
-
-// ---- Per-route document title ----
-const SITE_TITLE = 'BuildSoftTech — Research · Publication · Training · Technology';
-const TITLES = {
-  '/about': 'About Us',
-  '/services': 'Our Services',
-  '/services/research-publication': 'Research Paper Publication Support (IJEPA)',
-  '/services/research-collaboration': 'SCI / Scopus Research Collaboration',
-  '/services/research-support': 'Research Support Services',
-  '/internships': '45-Day Paid Internship Program',
-  '/courses': 'Software Training & Technology Courses',
-  '/research-areas': 'Research Areas',
-  '/for-faculty': 'For Faculty Members',
-  '/for-students': 'For Students',
-  '/for-research-scholars': 'For Research Scholars',
-  '/for-institutions': 'Institutional Services',
-  '/faq': 'Frequently Asked Questions',
-  '/contact': 'Contact Us',
-  '/enquire': 'Register / Enquire',
-  '/privacy-policy': 'Privacy Policy',
-  '/terms': 'Terms & Conditions',
-  '/refund-policy': 'Refund & Cancellation Policy',
-  '/research-ethics': 'Research & Publication Ethics',
-  '/authorship-policy': 'Authorship Policy',
-  '/disclaimer': 'Disclaimer',
-};
-export const RouteTitle = () => {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    const path = pathname.toLowerCase().replace(/\/+$/, '') || '/';
-    document.title = path === '/' ? SITE_TITLE : TITLES[path] ? `${TITLES[path]} | BuildSoftTech` : SITE_TITLE;
-  }, [pathname]);
-  return null;
-};

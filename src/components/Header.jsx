@@ -1,28 +1,34 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Icon from './Icon';
-import logo from '../assets/logo.png';
 import { IJEPA, SITE } from '../data/site';
 
 const SERVICES = [
-  { to: '/services/research-publication', label: 'Research Publication (IJEPA)', icon: 'fileText' },
-  { to: '/services/research-collaboration', label: 'SCI / Scopus Research Collaboration', icon: 'users' },
-  { to: '/services/research-support', label: 'Research Support Services', icon: 'flask' },
-  { to: '/internships', label: 'Internship Programs', icon: 'briefcase' },
-  { to: '/courses', label: 'Software Training', icon: 'code' },
-  { to: '/for-institutions', label: 'Institutional Programs', icon: 'building' },
-  { to: '/research-areas', label: 'Research Areas', icon: 'target' },
+  { href: '/services/research-publication', label: 'Research Publication (IJEPA)', icon: 'fileText' },
+  { href: '/services/research-collaboration', label: 'SCI / Scopus Research Collaboration', icon: 'users' },
+  { href: '/services/research-support', label: 'Research Support Services', icon: 'flask' },
+  { href: '/internships', label: 'Internship Programs', icon: 'briefcase' },
+  { href: '/courses', label: 'Software Training', icon: 'code' },
+  { href: '/for-institutions', label: 'Institutional Programs', icon: 'building' },
+  { href: '/research-areas', label: 'Research Areas', icon: 'target' },
 ];
 
 const AUDIENCES = [
-  { to: '/for-faculty', label: 'For Faculty Members', icon: 'graduation' },
-  { to: '/for-students', label: 'For Students', icon: 'user' },
-  { to: '/for-research-scholars', label: 'For Research Scholars', icon: 'bookOpen' },
-  { to: '/for-institutions', label: 'For Institutions', icon: 'building' },
+  { href: '/for-faculty', label: 'For Faculty Members', icon: 'graduation' },
+  { href: '/for-students', label: 'For Students', icon: 'user' },
+  { href: '/for-research-scholars', label: 'For Research Scholars', icon: 'bookOpen' },
+  { href: '/for-institutions', label: 'For Institutions', icon: 'building' },
 ];
 
+const NavLink = ({ href, pathname, children, ...rest }) => (
+  <Link href={href} className={pathname === href ? 'active' : ''} {...rest}>{children}</Link>
+);
+
 const Dropdown = ({ label, items, isOpen, onToggle, onNavigate, pathname }) => {
-  const active = items.some((i) => pathname === i.to);
+  const active = items.some((i) => pathname === i.href);
   return (
     <div className={`nav-item ${isOpen ? 'is-open' : ''} ${active ? 'is-active' : ''}`}>
       <button type="button" aria-expanded={isOpen} aria-haspopup="true" onClick={onToggle}>
@@ -30,9 +36,9 @@ const Dropdown = ({ label, items, isOpen, onToggle, onNavigate, pathname }) => {
       </button>
       <div className="nav-dropdown" role="menu">
         {items.map((item) => (
-          <NavLink key={item.to} to={item.to} onClick={onNavigate} role="menuitem">
+          <Link key={item.href} href={item.href} className={pathname === item.href ? 'active' : ''} onClick={onNavigate} role="menuitem">
             <Icon name={item.icon} size={16} /> {item.label}
-          </NavLink>
+          </Link>
         ))}
       </div>
     </div>
@@ -40,7 +46,7 @@ const Dropdown = ({ label, items, isOpen, onToggle, onNavigate, pathname }) => {
 };
 
 const Header = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const menuButtonRef = useRef(null);
@@ -49,7 +55,7 @@ const Header = () => {
   useEffect(() => {
     setIsMenuOpen(false);
     setOpenDropdown(null);
-  }, [location.pathname]);
+  }, [pathname]);
 
   useEffect(() => {
     if (!isMenuOpen && !openDropdown) return undefined;
@@ -90,8 +96,8 @@ const Header = () => {
       </div>
 
       <div className="main-nav-wrap">
-        <Link to="/" className="site-brand" onClick={closeMenu}>
-          <img src={logo} alt="" width="46" height="46" />
+        <Link href="/" className="site-brand" onClick={closeMenu}>
+          <img src="/logo.png" alt="" width="46" height="46" />
           <span className="brand-wordmark">
             <span className="brand-name">BuildSoftTech</span>
             <span className="brand-tagline">Research · Publication · Training</span>
@@ -109,16 +115,15 @@ const Header = () => {
           <Icon name={isMenuOpen ? 'x' : 'menu'} size={26} />
         </button>
         <nav id="primary-nav" ref={navRef} className={`primary-nav ${isMenuOpen ? 'is-open' : ''}`} aria-label="Primary navigation">
-          <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
-          <NavLink to="/about" onClick={closeMenu}>About Us</NavLink>
-          <Dropdown label="Services" items={SERVICES} isOpen={openDropdown === 'services'} onToggle={() => toggle('services')} onNavigate={closeMenu} pathname={location.pathname} />
+          <NavLink href="/" pathname={pathname} onClick={closeMenu}>Home</NavLink>
+          <NavLink href="/about" pathname={pathname} onClick={closeMenu}>About Us</NavLink>
+          <Dropdown label="Services" items={SERVICES} isOpen={openDropdown === 'services'} onToggle={() => toggle('services')} onNavigate={closeMenu} pathname={pathname} />
           <a href={IJEPA.url} target="_blank" rel="noreferrer" onClick={closeMenu}>IJEPA Journal <Icon name="arrowUpRight" size={13} /></a>
-          <NavLink to="/internships" onClick={closeMenu}>Internships</NavLink>
-          <NavLink to="/courses" onClick={closeMenu}>Courses</NavLink>
-          <Dropdown label="Who We Serve" items={AUDIENCES} isOpen={openDropdown === 'audiences'} onToggle={() => toggle('audiences')} onNavigate={closeMenu} pathname={location.pathname} />
-          <NavLink to="/faq" onClick={closeMenu}>FAQ</NavLink>
-          <NavLink to="/contact" onClick={closeMenu}>Contact</NavLink>
-          <Link to="/enquire" className="nav-cta" onClick={closeMenu}>Register / Enquire</Link>
+          <NavLink href="/internships" pathname={pathname} onClick={closeMenu}>Internships</NavLink>
+          <NavLink href="/courses" pathname={pathname} onClick={closeMenu}>Courses</NavLink>
+          <Dropdown label="Who We Serve" items={AUDIENCES} isOpen={openDropdown === 'audiences'} onToggle={() => toggle('audiences')} onNavigate={closeMenu} pathname={pathname} />
+          <NavLink href="/faq" pathname={pathname} onClick={closeMenu}>FAQ</NavLink>
+          <Link href="/contact" className="nav-cta" onClick={closeMenu}>Contact Us</Link>
         </nav>
       </div>
     </header>

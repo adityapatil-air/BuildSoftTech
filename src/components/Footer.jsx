@@ -1,42 +1,41 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png';
+import Link from 'next/link';
 import { DISCLAIMER, IJEPA, SITE } from '../data/site';
 
 const Footer = () => (
   <footer className="site-footer">
     <div className="footer-grid site-container">
       <div className="footer-about">
-        <div className="footer-brand"><img src={logo} alt="" width="44" height="44" /><strong>BuildSoftTech</strong></div>
+        <div className="footer-brand"><img src="/logo.png" alt="" width="44" height="44" /><strong>BuildSoftTech</strong></div>
         <p className="footer-tagline">{SITE.tagline}</p>
         <p>Professional research publication support, research collaboration, internships and technology training services for researchers, academicians, students and institutions.</p>
       </div>
       <div>
         <h3>Quick Links</h3>
-        <Link to="/about">About Us</Link>
-        <Link to="/services">Services</Link>
-        <Link to="/services/research-publication">Research Publication</Link>
-        <Link to="/services/research-collaboration">SCI/Scopus Research</Link>
-        <Link to="/internships">Internship</Link>
-        <Link to="/courses">Training Courses</Link>
+        <Link href="/about">About Us</Link>
+        <Link href="/services">Services</Link>
+        <Link href="/services/research-publication">Research Publication</Link>
+        <Link href="/services/research-collaboration">SCI/Scopus Research</Link>
+        <Link href="/internships">Internship</Link>
+        <Link href="/courses">Training Courses</Link>
       </div>
       <div>
         <h3>Who We Serve</h3>
-        <Link to="/for-faculty">Faculty Services</Link>
-        <Link to="/for-students">Student Services</Link>
-        <Link to="/for-research-scholars">Research Scholars</Link>
-        <Link to="/for-institutions">Institutional Services</Link>
-        <Link to="/research-areas">Research Areas</Link>
-        <Link to="/contact">Contact Us</Link>
+        <Link href="/for-faculty">Faculty Services</Link>
+        <Link href="/for-students">Student Services</Link>
+        <Link href="/for-research-scholars">Research Scholars</Link>
+        <Link href="/for-institutions">Institutional Services</Link>
+        <Link href="/research-areas">Research Areas</Link>
+        <Link href="/contact">Contact Us</Link>
       </div>
       <div>
         <h3>Important Policies</h3>
-        <Link to="/privacy-policy">Privacy Policy</Link>
-        <Link to="/terms">Terms &amp; Conditions</Link>
-        <Link to="/refund-policy">Refund &amp; Cancellation</Link>
-        <Link to="/research-ethics">Research &amp; Publication Ethics</Link>
-        <Link to="/authorship-policy">Authorship Policy</Link>
-        <Link to="/disclaimer">Disclaimer</Link>
+        <Link href="/privacy-policy">Privacy Policy</Link>
+        <Link href="/terms">Terms &amp; Conditions</Link>
+        <Link href="/refund-policy">Refund &amp; Cancellation</Link>
+        <Link href="/research-ethics">Research &amp; Publication Ethics</Link>
+        <Link href="/authorship-policy">Authorship Policy</Link>
+        <Link href="/disclaimer">Disclaimer</Link>
       </div>
       <div>
         <h3>Contact</h3>
@@ -49,7 +48,7 @@ const Footer = () => (
     <div className="footer-disclaimer site-container"><strong>Disclaimer:</strong> {DISCLAIMER}</div>
     <div className="copyright site-container">
       <span>© {new Date().getFullYear()} BuildSoftTech. All rights reserved. Publisher of {IJEPA.name} (ISSN {IJEPA.issn}).</span>
-      <span><Link to="/privacy-policy">Privacy Policy</Link> &nbsp; | &nbsp; <Link to="/terms">Terms &amp; Conditions</Link> &nbsp; | &nbsp; <Link to="/disclaimer">Disclaimer</Link></span>
+      <span><Link href="/privacy-policy">Privacy Policy</Link> &nbsp; | &nbsp; <Link href="/terms">Terms &amp; Conditions</Link> &nbsp; | &nbsp; <Link href="/disclaimer">Disclaimer</Link></span>
     </div>
   </footer>
 );

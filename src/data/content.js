@@ -129,7 +129,7 @@ export const PACKAGES = [
     letter: 'Package C', title: 'Advanced Research Collaboration',
     forWho: 'For researchers seeking deeper involvement in SCI/SCIE/Scopus-oriented research',
     includes: ['Advanced research methodology', 'Novel algorithm/model development', 'Experimental validation', 'Research manuscript development', 'Technical revision', 'Target-journal analysis', 'Submission support', 'Reviewer-response support', 'Revision assistance'],
-    duration: '6–12 Months', fee: 'Based on Research Scope', cta: 'Discuss Your Research', to: '/enquire?service=collaboration',
+    duration: '6–12 Months', fee: 'Based on Research Scope', cta: 'Discuss Your Research', to: '/contact',
   },
 ];
 
