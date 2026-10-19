@@ -38,7 +38,10 @@ const AuthForm = ({ mode }) => {
         const { data, error: err } = await supabase.auth.signUp({
           email: form.email.trim(),
           password: form.password,
-          options: { data: { full_name: form.full_name.trim(), phone: form.phone.trim(), institution: form.institution.trim(), degree: form.degree } },
+          options: {
+            data: { full_name: form.full_name.trim(), phone: form.phone.trim(), institution: form.institution.trim(), degree: form.degree },
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+          },
         });
         if (err) throw err;
         if (!data.session) {
@@ -80,6 +83,7 @@ const AuthForm = ({ mode }) => {
           <p className="auth-subtitle">
             {isRegister ? <>Already have an account? <Link href={`/login?next=${encodeURIComponent(next)}`}>Sign in</Link></> : <>New here? <Link href={`/register?next=${encodeURIComponent(next)}`}>Create an account</Link></>}
           </p>
+          {params.get('confirm') === 'failed' && <div className="admin-alert is-error">That confirmation link has expired or was already used. Sign in below, or register again.</div>}
           <form onSubmit={submit}>
             {isRegister && (
               <>
