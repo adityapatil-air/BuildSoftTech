@@ -8,7 +8,7 @@ Source repository (current implementation, for reference only): https://github.c
 
 ## 1. What BuildSoftTech is
 
-BuildSoftTech is a research and technology services organisation in Pune, India. It is the publisher of the IJEPA journal (International Journal of Engineering Practices and Applications, ISSN 3139-5961, https://ijepa.vercel.app). The BuildSoftTech website is the **parent** site; IJEPA is the **child** site, linked from BuildSoftTech's navigation and content. The two should feel like one family of sites.
+BuildSoftTech is a research and technology services organisation in Pune, India. It is the publisher of the IJEPA journal (International Journal of Engineering Practices and Applications, ISSN 3139-5961, https://ijepa.vercel.app). The BuildSoftTech website is the **parent** site; IJEPA is the **child** site, linked from BuildSoftTech's navigation and content.
 
 The business has four verticals:
 
