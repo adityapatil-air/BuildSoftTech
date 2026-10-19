@@ -11,3 +11,6 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 grant execute on function public.verify_certificate(text) to anon, authenticated;
+
+-- Make the API see the new function immediately.
+notify pgrst, 'reload schema';
