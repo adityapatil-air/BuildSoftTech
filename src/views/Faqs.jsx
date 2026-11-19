@@ -1,27 +1,25 @@
 import React from 'react';
 import Link from 'next/link';
-import { PageHero } from '../components/ui';
+import { Faq, PageHero, Section } from '../components/ui';
 import { FAQS } from '../data/content';
 
 const Faqs = () => (
-  <div className="pub">
-    <PageHero crumb="FAQs" title="Frequently asked questions" lead="Quick answers about courses, internships, publication support and patents." />
-    <section className="section">
-      <div className="wrap" style={{ maxWidth: 860 }}>
-        {FAQS.map((g) => (
-          <div key={g.group} className="faq-group" style={{ '--c': g.color }}>
-            <h2><span className="dot" />{g.group}</h2>
-            {g.items.map(([q, a]) => (
-              <details key={q} className="faq">
-                <summary>{q}</summary>
-                <div className="ans">{a}</div>
-              </details>
-            ))}
+  <div>
+    <PageHero crumbs={[{ label: 'FAQs' }]} eyebrow="FAQs" title="Frequently asked questions" intro="Quick answers about courses, internships, publication support and patents." />
+    <Section className="max-w-4xl">
+      <div className="space-y-12">
+        {FAQS.map((g, i) => (
+          <div key={g.group}>
+            <p className="font-display text-sm font-semibold text-accent">{String(i + 1).padStart(2, '0')}</p>
+            <h2 className="mt-1 font-display text-2xl font-semibold tracking-tight">{g.group}</h2>
+            <div className="mt-5"><Faq items={g.items} /></div>
           </div>
         ))}
-        <p className="lead">Still have a question? <Link href="/contact">Contact us</Link> and we will reply within 24 hours.</p>
       </div>
-    </section>
+      <p className="mt-12 text-sm text-muted-foreground sm:text-base">
+        Still have a question? <Link href="/contact" className="font-semibold text-primary hover:underline">Contact us</Link> and we will reply within 24 hours.
+      </p>
+    </Section>
   </div>
 );
 

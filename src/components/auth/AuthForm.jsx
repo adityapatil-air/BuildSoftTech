@@ -69,7 +69,7 @@ const AuthForm = ({ mode }) => {
     <div className="auth-page">
       <div className="auth-shell">
         <aside className="auth-visual">
-          <Logo />
+          <Logo onDark />
           <div>
             <h2>{isRegister ? 'Create your student account' : 'Welcome back'}</h2>
             <ul className="auth-visual-points">

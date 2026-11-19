@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Mail, Menu, Phone, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
+import { cn } from '../lib/utils';
 import { Logo } from './ui';
 
 const NAV = [
@@ -17,16 +18,21 @@ const NAV = [
   { href: '/contact', label: 'Contact' },
 ];
 
-const Header = ({ contact, topbar, user, profile }) => {
+const Header = ({ topbar, user, profile }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  useEffect(() => { setOpen(false); }, [pathname]);
+  const [userOpen, setUserOpen] = useState(false);
+  const userRef = useRef(null);
+
+  useEffect(() => { setOpen(false); setUserOpen(false); }, [pathname]);
   useEffect(() => {
-    if (!open) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    if (!userOpen && !open) return undefined;
+    const onDown = (e) => { if (userRef.current && !userRef.current.contains(e.target)) setUserOpen(false); };
+    const onKey = (e) => { if (e.key === 'Escape') { setUserOpen(false); setOpen(false); } };
+    document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open]);
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
+  }, [userOpen, open]);
 
   const isActive = (l) => (l.exact ? pathname === l.href : pathname === l.href || pathname.startsWith(`${l.href}/`));
   const isAdmin = profile?.role === 'admin';
@@ -35,60 +41,80 @@ const Header = ({ contact, topbar, user, profile }) => {
 
   return (
     <>
-      <div className="topbar">
-        <div className="wrap">
-          <div className="group">
-            {contact.phoneDisplay && <span className="item"><Phone width={14} height={14} aria-hidden="true" /><a href={`tel:${contact.phoneLink}`}>{contact.phoneDisplay}</a></span>}
-            {contact.email && <span className="item"><Mail width={14} height={14} aria-hidden="true" /><a href={`mailto:${contact.email}`}>{contact.email}</a></span>}
-          </div>
-          <div className="group">
-            {topbar?.text && (
-              <span className="item">
-                {topbar.pill && <span className="pill">{topbar.pill}</span>}
-                {topbar.text}
-                {topbar.linkLabel && topbar.link && <> &ndash; <Link href={topbar.link}><b>{topbar.linkLabel}</b></Link></>}
-              </span>
+      {topbar?.text && (
+        <div className="bg-primary text-primary-foreground">
+          <p className="mx-auto max-w-6xl px-4 py-2 text-center text-xs sm:px-6">
+            {topbar.pill && <span className="mr-2 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-accent-foreground">{topbar.pill}</span>}
+            <span className="opacity-90">{topbar.text}</span>
+            {topbar.linkLabel && topbar.link && <> · <Link href={topbar.link} className="font-semibold underline underline-offset-2">{topbar.linkLabel}</Link></>}
+          </p>
+        </div>
+      )}
+
+      <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <Logo />
+
+          <nav className="hidden items-center gap-5 xl:flex" aria-label="Primary">
+            {NAV.map((l) => (
+              <Link key={l.href} href={l.href} aria-current={isActive(l) ? 'page' : undefined} className={cn('whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground', isActive(l) && 'font-semibold text-foreground')}>
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex shrink-0 items-center gap-2">
+            {user ? (
+              <div className="relative hidden sm:block" ref={userRef}>
+                <button type="button" aria-expanded={userOpen} onClick={() => setUserOpen((v) => !v)} className="inline-flex max-w-[180px] items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary">
+                  <span className="truncate" title={user.email}>{firstName}</span>
+                  <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform', userOpen && 'rotate-180')} />
+                </button>
+                {userOpen && (
+                  <div className="paper-card absolute right-0 top-11 w-56 rounded-xl p-2">
+                    <p className="truncate px-3 pb-2 pt-1 text-xs text-muted-foreground">{user.email}</p>
+                    <Link href={home} className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-secondary">{isAdmin ? 'Admin dashboard' : 'My dashboard'}</Link>
+                    {isAdmin && <Link href="/dashboard" className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-secondary">Student view</Link>}
+                    <form action="/auth/signout" method="post"><button type="submit" className="w-full rounded-md px-3 py-2 text-left text-sm text-foreground hover:bg-secondary">Sign out</button></form>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link href="/login" className="hidden whitespace-nowrap px-1 text-sm font-medium text-muted-foreground hover:text-foreground sm:inline-flex">Login</Link>
             )}
-            {topbar?.text && <span className="sep acct" aria-hidden="true">|</span>}
-            {user
-              ? (
-                <span className="item acct">
-                  <Link href={home}>{isAdmin ? 'Admin' : 'My dashboard'} ({firstName})</Link>
-                  <form action="/auth/signout" method="post"><button type="submit">Sign out</button></form>
-                </span>
-              )
-              : <span className="item acct"><Link href="/login">Student login</Link></span>}
+            <Link href="/contact" className="hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex">
+              Free consultation
+            </Link>
+            <button type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="mobile-nav" className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border xl:hidden" onClick={() => setOpen((v) => !v)}>
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
-      </div>
 
-      <header className="site-header">
-        <div className="wrap">
-          <Logo />
-          <button type="button" className="menu-btn" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="main-nav" onClick={() => setOpen((v) => !v)}>
-            {open ? <X width={26} height={26} /> : <Menu width={26} height={26} />}
-          </button>
-          <nav id="main-nav" className={`nav${open ? ' open' : ''}`} aria-label="Main">
-            {NAV.map((l) => (
-              <Link key={l.href} href={l.href} className={isActive(l) ? 'active' : undefined} aria-current={isActive(l) ? 'page' : undefined}>{l.label}</Link>
-            ))}
-            <Link className="btn btn-primary" href="/contact">Free Consultation</Link>
-            <div className="nav-account">
-              {user ? (
-                <>
-                  <Link href={home}>{isAdmin ? 'Admin dashboard' : 'My dashboard'}</Link>
-                  {isAdmin && <Link href="/dashboard">Student view</Link>}
-                  <form action="/auth/signout" method="post"><button type="submit">Sign out ({firstName})</button></form>
-                </>
-              ) : (
-                <>
-                  <Link href="/login">Student login</Link>
-                  <Link href="/register">Create an account</Link>
-                </>
-              )}
+        {open && (
+          <nav id="mobile-nav" className="max-h-[calc(100vh-64px)] overflow-y-auto border-t border-border bg-background px-4 py-3 xl:hidden" aria-label="Mobile">
+            <div className="flex flex-col gap-1">
+              {NAV.map((l) => (
+                <Link key={l.href} href={l.href} className={cn('rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary', isActive(l) && 'bg-secondary')}>{l.label}</Link>
+              ))}
+              <div className="mt-2 flex flex-col gap-1 border-t border-border pt-3">
+                <Link href="/contact" className="rounded-md bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground">Free consultation</Link>
+                {user ? (
+                  <>
+                    <Link href={home} className="rounded-md px-3 py-2 text-sm font-medium text-primary">{isAdmin ? 'Admin dashboard' : 'My dashboard'}</Link>
+                    {isAdmin && <Link href="/dashboard" className="rounded-md px-3 py-2 text-sm font-medium text-primary">Student view</Link>}
+                    <form action="/auth/signout" method="post"><button type="submit" className="w-full rounded-md px-3 py-2 text-left text-sm font-medium text-muted-foreground">Sign out ({firstName})</button></form>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className="rounded-md px-3 py-2 text-sm font-medium text-primary">Student login</Link>
+                    <Link href="/register" className="rounded-md px-3 py-2 text-sm font-medium text-primary">Create an account</Link>
+                  </>
+                )}
+              </div>
             </div>
           </nav>
-        </div>
+        )}
       </header>
     </>
   );

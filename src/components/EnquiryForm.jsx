@@ -13,7 +13,7 @@ const Field = ({ label, id, full, children }) => (
 
 const Submit = ({ label }) => {
   const { pending } = useFormStatus();
-  return <button className="btn btn-primary" type="submit" disabled={pending}>{pending ? 'Sending…' : label}</button>;
+  return <button className="button button-primary" type="submit" disabled={pending}>{pending ? 'Sending…' : label}</button>;
 };
 
 // variant: 'demo' (training), 'internship', 'contact'
@@ -26,8 +26,8 @@ const EnquiryForm = ({ variant, title, options = [], defaultTopic = '', duration
   const submitLabel = { demo: 'Book free demo', internship: 'Submit application', contact: 'Send message' }[variant];
 
   return (
-    <form ref={ref} action={action} className="form">
-      {title && <h2>{title}</h2>}
+    <form ref={ref} action={action} className="paper-card relative rounded-xl p-6 sm:p-8">
+      {title && <h2 className="mb-5 font-display text-2xl font-semibold tracking-tight">{title}</h2>}
       <input type="hidden" name="kind" value={variant} />
       <div className="hp-field" aria-hidden="true"><label htmlFor={`${p}-website`}>Website</label><input id={`${p}-website`} name="company_website" tabIndex={-1} autoComplete="off" /></div>
       <div className="form-grid">

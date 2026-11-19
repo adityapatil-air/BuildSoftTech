@@ -11,5 +11,5 @@ export const metadata = {
 export default async function Route({ searchParams }) {
   const settings = await getSettings();
   const notice = searchParams?.error || searchParams?.ok ? <div className="wrap" style={{ paddingTop: 24 }}><Flash searchParams={searchParams} /></div> : null;
-  return <Page settings={settings} course={String(searchParams?.course || '')} batches={<>{notice}<OpenBatches kind="course" back="/training" /></>} />;
+  return <Page settings={settings} course={String(searchParams?.course || '')} batches={<>{notice}<OpenBatches kind="course" back="/training" alt={false} /></>} />;
 }

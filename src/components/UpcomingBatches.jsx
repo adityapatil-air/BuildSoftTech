@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getSession } from '../lib/session';
 import { fmtDate } from '../lib/forms';
+import { Note, Section, SectionHead, Table } from './ui';
 
 // Home page "Upcoming batches" table, from the courses the admin has opened.
 const UpcomingBatches = async () => {
@@ -12,34 +13,25 @@ const UpcomingBatches = async () => {
   const rows = data || [];
 
   return (
-    <section className="section alt">
-      <div className="wrap">
-        <div className="section-head">
-          <span className="eyebrow">Upcoming batches</span>
-          <h2>Start this month</h2>
-        </div>
+    <Section tone="secondary">
+      <SectionHead eyebrow="Upcoming batches" title="Start this month" />
+      <div className="mt-8">
         {rows.length ? (
-          <div className="table-wrap">
-            <table>
-              <thead><tr><th>Course</th><th>Mode</th><th>Start date</th><th>Duration</th><th /></tr></thead>
-              <tbody>
-                {rows.map((r) => (
-                  <tr key={r.id}>
-                    <td><b>{r.title}</b></td>
-                    <td>{r.mode || '—'}</td>
-                    <td className="num">{r.start_date ? fmtDate(r.start_date) : 'To be announced'}</td>
-                    <td>{r.duration || '—'}</td>
-                    <td><Link className="btn btn-outline btn-sm" href="/training#batches">Enroll</Link></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            head={['Course', 'Mode', 'Start date', 'Duration', '']}
+            rows={rows.map((r) => [
+              <strong key="t" className="font-semibold text-foreground">{r.title}</strong>,
+              r.mode || '—',
+              <span key="d" className="whitespace-nowrap">{r.start_date ? fmtDate(r.start_date) : 'To be announced'}</span>,
+              r.duration || '—',
+              <Link key="e" href="/training#batches" className="font-semibold text-primary hover:underline">Enroll →</Link>,
+            ])}
+          />
         ) : (
-          <p className="note info">New weekday and weekend batches start every month. <Link href="/training#enquiry">Ask for the next start date</Link> and we will call you back.</p>
+          <Note>New weekday and weekend batches start every month. <Link href="/training#enquiry" className="font-semibold text-primary hover:underline">Ask for the next start date</Link> and we will call you back.</Note>
         )}
       </div>
-    </section>
+    </Section>
   );
 };
 

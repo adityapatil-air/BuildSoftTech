@@ -1,12 +1,12 @@
-import { Nunito_Sans, Sora } from 'next/font/google';
+import { Fraunces, Work_Sans } from 'next/font/google';
 import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getSettings } from '../lib/store';
 import { getSession } from '../lib/session';
 
-const sora = Sora({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-sora', display: 'swap' });
-const nunito = Nunito_Sans({ subsets: ['latin'], weight: ['400', '600', '700'], variable: '--font-nunito', display: 'swap' });
+const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-fraunces', display: 'swap', axes: ['opsz'] });
+const workSans = Work_Sans({ subsets: ['latin'], variable: '--font-work-sans', display: 'swap' });
 
 export const metadata = {
   metadataBase: new URL('https://buildsofttechin.vercel.app'),
@@ -26,15 +26,15 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export const viewport = { themeColor: '#0f1b3d', width: 'device-width', initialScale: 1 };
+export const viewport = { themeColor: '#163056', width: 'device-width', initialScale: 1 };
 
 export default async function RootLayout({ children }) {
   const [{ contact, social, topbar }, session] = await Promise.all([getSettings(), getSession()]);
   return (
-    <html lang="en" className={`${sora.variable} ${nunito.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${workSans.variable}`}>
       <body>
         <a href="#main-content" className="skip-link">Skip to main content</a>
-        <div className="flex min-h-screen flex-col">
+        <div className="flex min-h-screen flex-col bg-background text-foreground">
           <Header
             contact={contact}
             topbar={topbar}
