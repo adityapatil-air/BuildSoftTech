@@ -1,6 +1,18 @@
-# BuildSoftTech — project status (as of 19 Oct 2026)
+# BuildSoftTech — project status (updated 19 Nov 2026)
 
 Repository: github.com/adityapatil-air/BuildSoftTech · Live: https://buildsofttechin.vercel.app (branch `main`) · Active work: branch `dev`.
+
+## 0. November 2026 redesign (current)
+
+The client sent a new content pack and UI reference (static HTML site + `style.css` + screenshots). The site was rebuilt to match it; the previous Lovable-style UI is kept unchanged on branch **`backup`**. Sections 2 and 3 below describe that earlier site.
+
+- **Design**: navy top bar and glow hero, Sora + Nunito Sans, one colour per service (blue training, teal internship, violet research, pink books, orange patents). All styles are in `src/app/globals.css`; public pages wrap their content in `.pub`.
+- **Pages**: `/`, `/about`, `/training`, `/internship`, `/research`, `/patents`, `/faqs`, `/contact`, `/policies`, `/certificates` (verify by number). Old URLs (`/courses`, `/internships`, `/services/*`, `/faq`, `/for-*`, policy pages) redirect permanently (see `next.config.mjs`).
+- **Copy**: client content in `src/data/content.js`; fees, plans, stats, top-bar text, testimonials, contact and social links are admin-editable (`/admin` → Site settings, defaults in `src/data/defaults.js`, settings version 2). Settings saved under the old design are ignored except phone and address.
+- **Forms**: demo class (Training), internship application and contact form save to `public.enquiries` (`supabase/003_enquiries.sql`, run once) and appear at `/admin/enquiries`. Until the table exists, the forms reply with the email and phone instead.
+- **WhatsApp**: the floating button and "WhatsApp Us" appear only when a WhatsApp number is set in admin settings.
+- **Not shown until real data exists**: testimonials, team members, social icons. Empty fees show "Fee on request". The refund policy still has the client's bracketed placeholders ([50%], [7] days, ₹[XXX]).
+- Platform features (login by username, student dashboard, admin courses/internships/certificates) are unchanged and restyled.
 
 ## 1. What the project is
 

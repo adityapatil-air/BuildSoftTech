@@ -11,7 +11,7 @@ async function enrol(fd, kind) {
   const parentKey = kind === 'course' ? 'course_id' : 'internship_id';
   const parentTable = kind === 'course' ? 'courses' : 'internships';
   const id = str(fd, 'id', 40);
-  const from = localPath(fd, 'back', kind === 'course' ? '/courses' : '/internships');
+  const from = localPath(fd, 'back', kind === 'course' ? '/training' : '/internship');
   const { supabase, user } = await requireUser(from);
   if (!isUuid(id)) back(from, 'Unknown program.', 'error');
 

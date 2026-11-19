@@ -5,30 +5,36 @@ import { useRouter } from 'next/navigation';
 import Icon from '../Icon';
 
 const SECTIONS = [
-  { id: 'internship', label: 'Internship', icon: 'briefcase' },
-  { id: 'courses', label: 'Courses', icon: 'code' },
-  { id: 'topics', label: 'Research topics', icon: 'users' },
-  { id: 'packages', label: 'Packages', icon: 'layers' },
-  { id: 'contact', label: 'Contact details', icon: 'mail' },
+  { id: 'courses', label: 'Courses & fees', icon: 'code' },
+  { id: 'internshipPlans', label: 'Internship plans', icon: 'briefcase' },
+  { id: 'researchPackages', label: 'Research packages', icon: 'book' },
+  { id: 'patentPlans', label: 'Patent plans', icon: 'lightbulb' },
+  { id: 'home', label: 'Top bar & stats', icon: 'trending' },
+  { id: 'testimonials', label: 'Testimonials', icon: 'star' },
+  { id: 'contact', label: 'Contact & social', icon: 'mail' },
 ];
 
-const STATUS = ['Available', 'Reserved', 'Closed'];
+const ICON_CHOICES = ['brain', 'database', 'chart', 'infinity', 'flask', 'terminal', 'globe', 'code', 'cloud', 'sparkles', 'blocks', 'laptop'];
 
-const Field = ({ label, value, onChange, hint, type = 'text', textarea }) => (
-  <div className="form-group">
+const Field = ({ label, value, onChange, hint, type = 'text', textarea, full, placeholder }) => (
+  <div className={`form-group${full ? ' is-full' : ''}`}>
     <label>{label}</label>
     {textarea
-      ? <textarea className="form-textarea" value={value || ''} onChange={(e) => onChange(e.target.value)} />
-      : <input className="form-input" type={type} value={value || ''} onChange={(e) => onChange(e.target.value)} />}
+      ? <textarea className="form-textarea" value={value || ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+      : <input className="form-input" type={type} value={value || ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />}
     {hint && <div className="form-hint">{hint}</div>}
   </div>
 );
 
-const AdminDashboard = ({ initial, backend }) => {
+// Kept raw while typing (so Enter and commas work); the website trims and skips blanks.
+const toLines = (v) => v.split('\n');
+const toTags = (v) => v.split(',');
+
+const AdminDashboard = ({ initial }) => {
   const router = useRouter();
   const [settings, setSettings] = useState(initial);
-  const [section, setSection] = useState('internship');
-  const [status, setStatus] = useState(null); // { kind: 'ok' | 'error', text }
+  const [section, setSection] = useState('courses');
+  const [status, setStatus] = useState(null);
   const [saving, setSaving] = useState(false);
   const dirty = useMemo(() => JSON.stringify(settings) !== JSON.stringify(initial), [settings, initial]);
 
@@ -67,6 +73,39 @@ const AdminDashboard = ({ initial, backend }) => {
     set([key], arr);
   };
 
+  // Called as functions (not <Components/>) so inputs keep focus while typing.
+  const rowHead = (list, i, title, min = 0) => (
+    <div className="admin-card-head">
+      <strong>{title}</strong>
+      <div className="row-actions">
+        <button type="button" className="admin-icon-btn" onClick={() => moveRow(list, i, -1)} aria-label="Move up">↑</button>
+        <button type="button" className="admin-icon-btn" onClick={() => moveRow(list, i, 1)} aria-label="Move down">↓</button>
+        {settings[list].length > min && <button type="button" className="admin-icon-btn is-danger" onClick={() => removeRow(list, i)} aria-label="Remove"><Icon name="x" size={14} /></button>}
+      </div>
+    </div>
+  );
+
+  const plans = (list, suffix, addLabel) => (
+    <>
+      <p className="form-hint" style={{ marginBottom: 14 }}>Leave a fee empty to show “Fee on request”. Tick one plan as featured to highlight it.</p>
+      <div className="card-grid">
+        {settings[list].map((p, i) => (
+          <div className="admin-card" key={i} style={{ marginBottom: 0 }}>
+            {rowHead(list, i, p.name || `Plan ${i + 1}`, 1)}
+            <Field label="Name" value={p.name} onChange={(v) => set([list, i, 'name'], v)} />
+            {'duration' in p && <Field label="Duration" value={p.duration} onChange={(v) => set([list, i, 'duration'], v)} />}
+            <Field label="Fee" value={p.fee} onChange={(v) => set([list, i, 'fee'], v)} placeholder="₹ 4,999" hint={`Shown with “${suffix}”.`} />
+            <Field label="Includes (one per line)" value={(p.features || []).join('\n')} onChange={(v) => set([list, i, 'features'], toLines(v))} textarea />
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14 }}>
+              <input type="checkbox" checked={!!p.featured} onChange={(e) => set([list], settings[list].map((x, j) => ({ ...x, featured: j === i ? e.target.checked : false })))} /> Featured
+            </label>
+          </div>
+        ))}
+      </div>
+      <button type="button" className="button button-light" style={{ marginTop: 16 }} onClick={() => addRow(list, list === 'internshipPlans' ? { name: '', duration: '', fee: '', features: [], featured: false } : { name: '', fee: '', features: [], featured: false })}><Icon name="plus" size={14} /> {addLabel}</button>
+    </>
+  );
+
   return (
     <>
       <div className="admin-tabs" role="tablist">
@@ -86,95 +125,122 @@ const AdminDashboard = ({ initial, backend }) => {
         </div>
         {status && <div className={`admin-alert ${status.kind === 'error' ? 'is-error' : 'is-ok'}`}>{status.text}</div>}
 
-        {section === 'internship' && (
-          <div className="admin-card">
-            <div className="form-grid">
-              <Field label="Fee" value={settings.internship.fee} onChange={(v) => set(['internship', 'fee'], v)} hint="Shown on the home page, internship page and highlights table." />
-              <Field label="Duration" value={settings.internship.duration} onChange={(v) => set(['internship', 'duration'], v)} />
-              <Field label="Mode" value={settings.internship.mode} onChange={(v) => set(['internship', 'mode'], v)} />
-              <Field label="Next batch" value={settings.internship.nextBatch} onChange={(v) => set(['internship', 'nextBatch'], v)} hint="Optional, e.g. 'Starts 1 December 2026'. Leave empty to hide." />
-              <div className="is-full"><Field label="Note for applicants" value={settings.internship.note} onChange={(v) => set(['internship', 'note'], v)} textarea hint="Optional short note shown under the fee on the internship page." /></div>
-            </div>
-          </div>
-        )}
-
         {section === 'courses' && (
           <>
+            <p className="form-hint" style={{ marginBottom: 14 }}>The course catalogue on the Training page. These are catalogue cards; to run a batch students can enrol in, create it under Courses in the menu.</p>
             {settings.courses.map((c, i) => (
               <div className="admin-card" key={i}>
-                <div className="admin-card-head">
-                  <strong>{c.title || `Course ${i + 1}`}</strong>
-                  <div className="row-actions">
-                    <button type="button" className="admin-icon-btn" onClick={() => moveRow('courses', i, -1)} aria-label="Move up">↑</button>
-                    <button type="button" className="admin-icon-btn" onClick={() => moveRow('courses', i, 1)} aria-label="Move down">↓</button>
-                    <button type="button" className="admin-icon-btn is-danger" onClick={() => removeRow('courses', i)} aria-label="Remove course"><Icon name="x" size={14} /></button>
-                  </div>
-                </div>
+                {rowHead('courses', i, c.title || `Course ${i + 1}`, 1)}
                 <div className="form-grid">
                   <Field label="Title" value={c.title} onChange={(v) => set(['courses', i, 'title'], v)} />
-                  <Field label="Fee" value={c.fee} onChange={(v) => set(['courses', i, 'fee'], v)} hint="Optional, e.g. ₹4,500/-" />
-                  <Field label="Duration" value={c.duration} onChange={(v) => set(['courses', i, 'duration'], v)} hint="Optional, e.g. 6 weeks" />
-                  <div className="is-full"><Field label="Topics covered (one per line)" value={(c.items || []).join('\n')} onChange={(v) => set(['courses', i, 'items'], v.split('\n').map((t) => t.trim()).filter(Boolean))} textarea /></div>
+                  <Field label="Fee" value={c.fee} onChange={(v) => set(['courses', i, 'fee'], v)} placeholder="₹ 24,999" hint="Leave empty to show “Fee on request”." />
+                  <Field label="Duration" value={c.duration} onChange={(v) => set(['courses', i, 'duration'], v)} placeholder="3 months" />
+                  <div className="form-group">
+                    <label>Icon</label>
+                    <select className="form-select" value={c.icon || 'code'} onChange={(e) => set(['courses', i, 'icon'], e.target.value)}>
+                      {ICON_CHOICES.map((n) => <option key={n}>{n}</option>)}
+                    </select>
+                  </div>
+                  <Field full label="What it covers" value={c.summary} onChange={(v) => set(['courses', i, 'summary'], v)} textarea />
+                  <Field full label="Tools (comma separated)" value={(c.tags || []).join(',')} onChange={(v) => set(['courses', i, 'tags'], toTags(v))} />
                 </div>
               </div>
             ))}
-            <button type="button" className="button button-light" onClick={() => addRow('courses', { title: '', icon: 'code', items: [], fee: '', duration: '' })}><Icon name="plus" size={14} /> Add course</button>
+            <button type="button" className="button button-light" onClick={() => addRow('courses', { title: '', duration: '', summary: '', tags: [], icon: 'code', fee: '' })}><Icon name="plus" size={14} /> Add course</button>
           </>
         )}
 
-        {section === 'topics' && (
+        {section === 'internshipPlans' && plans('internshipPlans', '/ intern', 'Add plan')}
+        {section === 'patentPlans' && plans('patentPlans', '+ govt. fee', 'Add plan')}
+
+        {section === 'researchPackages' && (
           <div className="admin-card">
-            <p className="form-hint" style={{ marginBottom: 14 }}>These rows appear in the “Available Research Collaboration Opportunities” table.</p>
+            <p className="form-hint" style={{ marginBottom: 14 }}>The packages table in the journal section of the Research page. Empty fee shows “On request”.</p>
             <div className="table-wrap">
               <table className="data-table admin-table">
-                <thead><tr><th>#</th><th>Research title</th><th>Area</th><th>Index</th><th>Duration</th><th>Fee</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Package</th><th>Includes</th><th>Fee</th><th /></tr></thead>
                 <tbody>
-                  {settings.topics.map((t, i) => (
+                  {settings.researchPackages.map((p, i) => (
                     <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td><input className="form-input" value={t.title} onChange={(e) => set(['topics', i, 'title'], e.target.value)} /></td>
-                      <td><input className="form-input" value={t.area} onChange={(e) => set(['topics', i, 'area'], e.target.value)} /></td>
-                      <td><input className="form-input" value={t.index} onChange={(e) => set(['topics', i, 'index'], e.target.value)} /></td>
-                      <td><input className="form-input" value={t.duration} onChange={(e) => set(['topics', i, 'duration'], e.target.value)} /></td>
-                      <td><input className="form-input" value={t.fee} onChange={(e) => set(['topics', i, 'fee'], e.target.value)} /></td>
-                      <td>
-                        <select className="form-select" value={t.status} onChange={(e) => set(['topics', i, 'status'], e.target.value)}>
-                          {STATUS.map((s) => <option key={s}>{s}</option>)}
-                        </select>
-                      </td>
-                      <td><button type="button" className="admin-icon-btn is-danger" onClick={() => removeRow('topics', i)} aria-label="Remove row"><Icon name="x" size={14} /></button></td>
+                      <td><input className="form-input" value={p.name} onChange={(e) => set(['researchPackages', i, 'name'], e.target.value)} /></td>
+                      <td><input className="form-input" style={{ minWidth: 300 }} value={p.includes} onChange={(e) => set(['researchPackages', i, 'includes'], e.target.value)} /></td>
+                      <td><input className="form-input" value={p.fee} placeholder="₹ 9,999" onChange={(e) => set(['researchPackages', i, 'fee'], e.target.value)} /></td>
+                      <td>{settings.researchPackages.length > 1 && <button type="button" className="admin-icon-btn is-danger" onClick={() => removeRow('researchPackages', i)} aria-label="Remove row"><Icon name="x" size={14} /></button>}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <button type="button" className="button button-light" onClick={() => addRow('topics', { id: settings.topics.length + 1, title: '', area: '', index: 'Scopus', duration: '', fee: '', status: 'Available' })}><Icon name="plus" size={14} /> Add topic</button>
+            <button type="button" className="button button-light" style={{ marginTop: 14 }} onClick={() => addRow('researchPackages', { name: '', includes: '', fee: '' })}><Icon name="plus" size={14} /> Add package</button>
           </div>
         )}
 
-        {section === 'packages' && (
-          <div className="card-grid">
-            {settings.packages.map((p, i) => (
-              <div className="admin-card" key={p.letter}>
-                <span className="tag">{p.letter}</span>
-                <h3 style={{ margin: '10px 0 14px', color: 'var(--brown)', fontSize: 16 }}>{p.title}</h3>
-                <Field label="Duration" value={p.duration} onChange={(v) => set(['packages', i, 'duration'], v)} />
-                <Field label="Fee" value={p.fee} onChange={(v) => set(['packages', i, 'fee'], v)} hint="e.g. Starting from ₹25,000 or Based on research scope" />
+        {section === 'home' && (
+          <>
+            <div className="admin-card">
+              <div className="admin-card-head"><strong>Top bar announcement</strong></div>
+              <div className="form-grid">
+                <Field label="Badge" value={settings.topbar.pill} onChange={(v) => set(['topbar', 'pill'], v)} placeholder="New" />
+                <Field label="Text" value={settings.topbar.text} onChange={(v) => set(['topbar', 'text'], v)} hint="Leave empty to hide the announcement." />
+                <Field label="Link label" value={settings.topbar.linkLabel} onChange={(v) => set(['topbar', 'linkLabel'], v)} />
+                <Field label="Link to" value={settings.topbar.link} onChange={(v) => set(['topbar', 'link'], v.startsWith('/') ? v : `/${v}`)} hint="A page on this site, e.g. /training" />
+              </div>
+            </div>
+            <div className="admin-card">
+              <div className="admin-card-head"><strong>Numbers under the home page hero</strong></div>
+              <p className="form-hint" style={{ marginBottom: 14 }}>Use real figures only. All four need a number and a label, otherwise the strip is hidden.</p>
+              <div className="form-grid">
+                {settings.stats.map((s, i) => (
+                  <React.Fragment key={i}>
+                    <Field label={`Number ${i + 1}`} value={s.value} onChange={(v) => set(['stats', i, 'value'], v)} placeholder="500+" />
+                    <Field label={`Label ${i + 1}`} value={s.label} onChange={(v) => set(['stats', i, 'label'], v)} placeholder="Students trained" />
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {section === 'testimonials' && (
+          <>
+            <p className="form-hint" style={{ marginBottom: 14 }}>Shown on the home page. Add only real reviews, with the learner’s permission. With none added, the section is hidden.</p>
+            {settings.testimonials.map((t, i) => (
+              <div className="admin-card" key={i}>
+                {rowHead('testimonials', i, t.name || `Review ${i + 1}`)}
+                <div className="form-grid">
+                  <Field label="Name" value={t.name} onChange={(v) => set(['testimonials', i, 'name'], v)} />
+                  <Field label="Course or program" value={t.role} onChange={(v) => set(['testimonials', i, 'role'], v)} placeholder="Data Science, Batch 2026" />
+                  <Field full label="Review" value={t.quote} onChange={(v) => set(['testimonials', i, 'quote'], v)} textarea />
+                </div>
               </div>
             ))}
-          </div>
+            <button type="button" className="button button-light" onClick={() => addRow('testimonials', { name: '', role: '', quote: '' })}><Icon name="plus" size={14} /> Add review</button>
+          </>
         )}
 
         {section === 'contact' && (
-          <div className="admin-card">
-            <div className="form-grid">
-              <Field label="Email" type="email" value={settings.contact.email} onChange={(v) => set(['contact', 'email'], v)} />
-              <Field label="Phone (as displayed)" value={settings.contact.phoneDisplay} onChange={(v) => set(['contact', 'phoneDisplay'], v)} />
-              <Field label="Phone (dial link, digits only)" value={settings.contact.phoneLink} onChange={(v) => set(['contact', 'phoneLink'], v.replace(/[^+\d]/g, ''))} hint="Used for tel: links, e.g. +918149844901" />
-              <Field label="Office hours" value={settings.contact.hours} onChange={(v) => set(['contact', 'hours'], v)} />
-              <div className="is-full"><Field label="Address" value={settings.contact.address} onChange={(v) => set(['contact', 'address'], v)} textarea /></div>
+          <>
+            <div className="admin-card">
+              <div className="form-grid">
+                <Field label="Email" type="email" value={settings.contact.email} onChange={(v) => set(['contact', 'email'], v)} />
+                <Field label="Research email" type="email" value={settings.contact.researchEmail} onChange={(v) => set(['contact', 'researchEmail'], v)} hint="Optional. Shown on the Contact page." />
+                <Field label="Phone (as displayed)" value={settings.contact.phoneDisplay} onChange={(v) => set(['contact', 'phoneDisplay'], v)} />
+                <Field label="Phone (dial link)" value={settings.contact.phoneLink} onChange={(v) => set(['contact', 'phoneLink'], v.replace(/[^+\d]/g, ''))} hint="Digits with country code, e.g. +918149844901" />
+                <Field label="WhatsApp number" value={settings.contact.whatsapp} onChange={(v) => set(['contact', 'whatsapp'], v.replace(/[^+\d]/g, ''))} hint="With country code. Leave empty to hide the WhatsApp button." />
+                <Field label="Office hours" value={settings.contact.hours} onChange={(v) => set(['contact', 'hours'], v)} />
+                <Field full label="Address" value={settings.contact.address} onChange={(v) => set(['contact', 'address'], v)} textarea />
+                <Field full label="Map search (optional)" value={settings.contact.mapQuery} onChange={(v) => set(['contact', 'mapQuery'], v)} hint="What to search on Google Maps for the Contact page map, if the address alone does not find the office." />
+              </div>
             </div>
-          </div>
+            <div className="admin-card">
+              <div className="admin-card-head"><strong>Social links (footer)</strong></div>
+              <div className="form-grid">
+                {['linkedin', 'youtube', 'instagram', 'facebook'].map((k) => (
+                  <Field key={k} label={k[0].toUpperCase() + k.slice(1)} value={settings.social[k]} onChange={(v) => set(['social', k], v.trim())} placeholder="https://" hint={k === 'linkedin' ? 'Full page addresses. Empty ones are not shown.' : undefined} />
+                ))}
+              </div>
+            </div>
+          </>
         )}
       </section>
     </>

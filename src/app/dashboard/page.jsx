@@ -30,15 +30,15 @@ export default async function DashboardPage({ searchParams }) {
           <p>{profile?.institution ? `${profile.institution} · ` : ''}{user.email}</p>
         </div>
         <div className="row-actions">
-          <Link href="/courses" className="button button-light button-small">Browse courses</Link>
-          <Link href="/internships" className="button button-light button-small">Internship program</Link>
+          <Link href="/training#batches" className="button button-light button-small">Browse courses</Link>
+          <Link href="/internship#batches" className="button button-light button-small">Internship program</Link>
         </div>
       </div>
 
       <section className="portal-section">
         <div className="section-heading"><div><h2>My courses</h2><p>Recordings, notes and links appear here once your enrolment is approved.</p></div></div>
         {!courses?.length ? (
-          <div className="portal-empty"><Icon name="book" size={26} /><p>You are not enrolled in any course yet.</p><Link href="/courses" className="button button-primary button-small">See available courses</Link></div>
+          <div className="portal-empty"><Icon name="book" size={26} /><p>You are not enrolled in any course yet.</p><Link href="/training#batches" className="button button-primary button-small">See available courses</Link></div>
         ) : (
           <div className="card-grid">
             {courses.map((e) => (
@@ -56,7 +56,7 @@ export default async function DashboardPage({ searchParams }) {
       <section className="portal-section">
         <div className="section-heading"><div><h2>My internships</h2><p>Your problem statement, weekly reviews and repository link.</p></div></div>
         {!internships?.length ? (
-          <div className="portal-empty"><Icon name="briefcase" size={26} /><p>No internship yet.</p><Link href="/internships" className="button button-primary button-small">About the 45-day internship</Link></div>
+          <div className="portal-empty"><Icon name="briefcase" size={26} /><p>No internship yet.</p><Link href="/internship#batches" className="button button-primary button-small">About the 45-day internship</Link></div>
         ) : (
           <div className="card-grid">
             {internships.map((e) => (

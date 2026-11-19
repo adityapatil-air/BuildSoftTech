@@ -51,7 +51,7 @@ export default async function CertificatePage({ params }) {
       <article className="certificate paper-card relative overflow-hidden rounded-2xl p-8 sm:p-14">
         <div className="pointer-events-none absolute inset-3 rounded-xl border-2 border-accent/50" />
         <div className="relative text-center">
-          <img src="/logo.png" alt="" width="72" height="72" className="mx-auto h-[72px] w-[72px] rounded-full" />
+          <img src="/logo-mark.svg" alt="" width="64" height="64" className="mx-auto h-16 w-16" />
           <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">BuildSoftTech · Publisher of {IJEPA.name}</p>
           <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl">
             {isCourse ? 'Certificate of Course Completion' : 'Internship Completion Certificate'}

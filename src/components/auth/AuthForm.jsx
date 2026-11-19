@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Icon from '../Icon';
+import { Logo } from '../ui';
 import { getSupabaseBrowser } from '../../lib/supabase/client';
 import { toLoginEmail } from '../../data/accounts';
 
@@ -68,7 +69,7 @@ const AuthForm = ({ mode }) => {
     <div className="auth-page">
       <div className="auth-shell">
         <aside className="auth-visual">
-          <div className="auth-visual-brand"><img src="/logo.png" alt="" width="46" height="46" /><strong>BuildSoftTech</strong></div>
+          <Logo />
           <div>
             <h2>{isRegister ? 'Create your student account' : 'Welcome back'}</h2>
             <ul className="auth-visual-points">
@@ -77,7 +78,7 @@ const AuthForm = ({ mode }) => {
               <li><span className="dot" /> Download your certificates when you finish</li>
             </ul>
           </div>
-          <small className="auth-visual-foot">Research · Publication · Training · Technology</small>
+          <small className="auth-visual-foot">Training · Internship · Research · Patents</small>
         </aside>
         <div className="auth-panel">
           <h1>{isRegister ? 'Register' : 'Sign in'}</h1>
@@ -111,7 +112,7 @@ const AuthForm = ({ mode }) => {
             {info && <div className="admin-alert is-ok">{info}</div>}
             <button type="submit" className="button button-primary" disabled={busy} style={{ width: '100%' }}>{busy ? 'Please wait…' : isRegister ? 'Create account' : 'Sign in'}</button>
           </form>
-          {isRegister && <p className="form-hint" style={{ marginTop: 14 }}>By registering you agree to our <Link href="/terms">Terms</Link> and <Link href="/privacy-policy">Privacy Policy</Link>.</p>}
+          {isRegister && <p className="form-hint" style={{ marginTop: 14 }}>By registering you agree to our <Link href="/policies#terms">Terms</Link> and <Link href="/policies#privacy">Privacy Policy</Link>.</p>}
         </div>
       </div>
     </div>

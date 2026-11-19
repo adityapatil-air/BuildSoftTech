@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Icon from '../../components/Icon';
 import AdminNav from '../../components/admin/AdminNav';
+import { LogoMark } from '../../components/ui';
 import { requireAdmin } from '../../lib/session';
 import { storageBackend } from '../../lib/store';
 
@@ -12,7 +13,7 @@ export default async function AdminLayout({ children }) {
     <div className="admin-shell site-container">
       <aside className="admin-side">
         <div className="admin-side-head">
-          <img src="/logo.png" alt="" width="36" height="36" />
+          <LogoMark />
           <div><strong>BuildSoftTech</strong><small>Admin</small></div>
         </div>
         <AdminNav />

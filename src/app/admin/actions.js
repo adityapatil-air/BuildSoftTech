@@ -326,3 +326,27 @@ export async function saveReview(fd) {
 export async function goTo(fd) {
   redirect(localPath(fd, 'to', '/admin'));
 }
+
+// ---------------------------------------------------------------- enquiries
+
+const ENQUIRY_STATUS = ['new', 'contacted', 'closed'];
+
+export async function setEnquiryStatus(fd) {
+  const { supabase } = await requireAdmin('/admin/enquiries');
+  const id = str(fd, 'id', 40);
+  if (!isUuid(id)) fail('/admin/enquiries', 'Unknown enquiry.');
+  const { error } = await supabase.from('enquiries').update({ status: oneOf(fd, 'status', ENQUIRY_STATUS, 'new') }).eq('id', id);
+  if (error) fail('/admin/enquiries', error);
+  revalidatePath('/admin/enquiries');
+  back(localPath(fd, 'back', '/admin/enquiries'), 'Enquiry updated.');
+}
+
+export async function deleteEnquiry(fd) {
+  const { supabase } = await requireAdmin('/admin/enquiries');
+  const id = str(fd, 'id', 40);
+  if (!isUuid(id)) fail('/admin/enquiries', 'Unknown enquiry.');
+  const { error } = await supabase.from('enquiries').delete().eq('id', id);
+  if (error) fail('/admin/enquiries', error);
+  revalidatePath('/admin/enquiries');
+  back(localPath(fd, 'back', '/admin/enquiries'), 'Enquiry deleted.');
+}

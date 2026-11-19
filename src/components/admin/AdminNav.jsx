@@ -10,6 +10,7 @@ const ITEMS = [
   { href: '/admin/courses', label: 'Courses', icon: 'book' },
   { href: '/admin/internships', label: 'Internships', icon: 'briefcase' },
   { href: '/admin/students', label: 'Students', icon: 'users' },
+  { href: '/admin/enquiries', label: 'Enquiries', icon: 'mail' },
 ];
 
 const AdminNav = () => {

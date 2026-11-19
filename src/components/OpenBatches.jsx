@@ -1,20 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
-import { Container } from './ui';
 import { getSession } from '../lib/session';
 import { enrolCourse, enrolInternship } from '../app/dashboard/actions';
 import { fmtDate } from '../lib/forms';
 
 const STATUS_LABEL = { pending: 'Request sent', active: 'Enrolled', completed: 'Completed', rejected: 'Not approved' };
+const COLORS = ['c-blue', 'c-teal', 'c-violet', 'c-orange', 'c-pink', 'c-sun'];
 
-// Live list of open courses or internships from the database, with an Enrol button.
-// Renders nothing when Supabase is not configured or nothing is open.
-const OpenBatches = async ({ kind, back }) => {
+// Live list of open course or internship batches from the database, with Enrol / Apply.
+// Renders nothing when Supabase is unreachable or nothing is open.
+const OpenBatches = async ({ kind, back, alt }) => {
   const { supabase, user } = await getSession();
   if (!supabase) return null;
   const isCourse = kind === 'course';
-  const table = isCourse ? 'courses' : 'internships';
-  const { data: items } = await supabase.from(table).select('*').in('status', isCourse ? ['open', 'running'] : ['open']).order('created_at', { ascending: false });
+  const { data: items } = await supabase.from(isCourse ? 'courses' : 'internships').select('*').in('status', isCourse ? ['open', 'running'] : ['open']).order('created_at', { ascending: false });
   if (!items?.length) return null;
 
   let mine = {};
@@ -25,46 +24,47 @@ const OpenBatches = async ({ kind, back }) => {
   const action = isCourse ? enrolCourse : enrolInternship;
 
   return (
-    <section id="batches" className="scroll-mt-24 border-b border-border bg-secondary">
-      <Container className="py-14">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Now enrolling</p>
-        <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">{isCourse ? 'Open course batches' : 'Open internship batches'}</h2>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((it) => {
+    <section id="batches" className={`section${alt ? ' alt' : ''}`} style={{ scrollMarginTop: 80 }}>
+      <div className="wrap">
+        <div className="section-head">
+          <span className="eyebrow">Now enrolling</span>
+          <h2>{isCourse ? 'Open course batches' : 'Open internship batches'}</h2>
+          <p className="lead">{isCourse ? 'Enrol with your student account. You get class recordings, notes and your certificate in your dashboard.' : 'Apply with your student account. Your problem statement, weekly reviews and certificate appear in your dashboard.'}</p>
+        </div>
+        <div className="grid grid-3">
+          {items.map((it, i) => {
             const e = mine[it.id];
             const detail = isCourse ? `/dashboard/courses/${it.id}` : e ? `/dashboard/internships/${e.id}` : null;
+            const meta = [isCourse ? it.duration : it.domain, isCourse ? it.mode : it.duration].filter(Boolean).join(' · ');
             return (
-              <div key={it.id} className="paper-card flex flex-col rounded-xl p-6">
-                <h3 className="font-display text-xl font-semibold tracking-tight">{it.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{[isCourse ? it.duration : it.domain, isCourse ? it.mode : it.duration, it.fee].filter(Boolean).join(' · ')}</p>
-                {isCourse && it.start_date && <p className="mt-1 text-xs font-semibold text-primary">Starts {fmtDate(it.start_date)}</p>}
-                {it.description && <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{it.description}</p>}
-                <div className="mt-5">
+              <article key={it.id} className={`card ${COLORS[i % COLORS.length]}`}>
+                <h3>{it.title}</h3>
+                {meta && <p>{meta}</p>}
+                {isCourse && it.start_date && <span className="tag is-brand" style={{ alignSelf: 'flex-start' }}>Starts {fmtDate(it.start_date)}</span>}
+                {it.description && <p style={{ fontSize: '.95rem' }}>{it.description}</p>}
+                <div style={{ marginTop: 'auto', paddingTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, borderTop: '1px dashed var(--line)' }}>
+                  <span className="price">{it.fee || ''}</span>
                   {e ? (
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-sm font-semibold text-foreground">{STATUS_LABEL[e.status]}</span>
-                      {detail && <Link href={detail} className="text-sm font-semibold text-primary hover:underline">Open →</Link>}
-                    </div>
+                    <span style={{ display: 'flex', gap: 12, alignItems: 'center', fontWeight: 700, fontSize: '.92rem' }}>
+                      {STATUS_LABEL[e.status]}
+                      {detail && <Link href={detail}>Open &rarr;</Link>}
+                    </span>
                   ) : user ? (
                     <form action={action}>
                       <input type="hidden" name="id" value={it.id} />
                       <input type="hidden" name="back" value={back} />
-                      <button type="submit" className="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90">
-                        {isCourse ? 'Enrol in this course' : 'Apply for this internship'}
-                      </button>
+                      <button type="submit" className="btn btn-primary btn-sm">{isCourse ? 'Enrol' : 'Apply'}</button>
                     </form>
                   ) : (
-                    <Link href={`/login?next=${encodeURIComponent(back)}`} className="inline-flex w-full items-center justify-center rounded-md border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-secondary">
-                      Sign in to {isCourse ? 'enrol' : 'apply'}
-                    </Link>
+                    <Link href={`/login?next=${encodeURIComponent(back)}`} className="btn btn-outline btn-sm">Sign in to {isCourse ? 'enrol' : 'apply'}</Link>
                   )}
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
-        {!user && <p className="mt-5 text-sm text-muted-foreground">New here? <Link href="/register" className="font-semibold text-primary">Create a student account</Link> — it takes a minute.</p>}
-      </Container>
+        {!user && <p style={{ marginTop: 20, color: 'var(--muted)' }}>New here? <Link href={`/register?next=${encodeURIComponent(back)}`}>Create a student account</Link>. It takes a minute.</p>}
+      </div>
     </section>
   );
 };

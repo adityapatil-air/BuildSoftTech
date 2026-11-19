@@ -1,260 +1,242 @@
-// Content lifted from the client's BuildSoftTech brief (buildsofttech.docx), grouped by section.
+// Page copy supplied by the client (Nov 2026 content pack). Lists live here; short prose
+// lives in the page views. Fees, stats and other admin-editable values are in defaults.js.
 
-export const CORE_SERVICES = [
-  {
-    to: '/services/research-publication',
-    icon: 'fileText',
-    title: 'Research Publication — IJEPA',
-    text: 'Professional support for peer-reviewed journal publication — from manuscript preparation to submission and revision — through our own journal, IJEPA.',
-  },
-  {
-    to: '/services/research-collaboration',
-    icon: 'users',
-    title: 'SCI / Scopus Research Collaboration',
-    text: 'Collaborative research and publication support for researchers and academicians seeking quality indexed-journal opportunities.',
-  },
-  {
-    to: '/courses',
-    icon: 'code',
-    title: 'Software Training',
-    text: 'Practical training in Python, Data Science, AI/ML, Full Stack Development, Cloud, DevOps and emerging technologies.',
-  },
-  {
-    to: '/internships',
-    icon: 'briefcase',
-    title: 'Internship Programs',
-    text: 'Hands-on 45-day internships designed to help students develop technical skills through real-world projects and guided implementation.',
-  },
+// Colour per service, used across pages so visitors learn the map.
+export const COLORS = ['#2547d0', '#0b9d9a', '#6d3be6', '#f2711c', '#d61f6f', '#c98f00', '#127a4b'];
+
+export const COURSES = [
+  { title: 'Data Science', duration: '4–6 months', summary: 'Python, statistics, EDA, machine learning, deep learning basics, NLP, deployment', tags: ['Python', 'Pandas', 'Scikit-learn', 'TensorFlow'], icon: 'brain' },
+  { title: 'Data Engineering', duration: '4 months', summary: 'SQL, data modelling, ETL/ELT pipelines, Spark, Airflow, warehouses, cloud data services', tags: ['SQL', 'PySpark', 'Airflow', 'Kafka', 'AWS'], icon: 'database' },
+  { title: 'Data Analytics', duration: '3 months', summary: 'Excel, SQL, statistics, dashboards and storytelling with data', tags: ['Excel', 'MySQL', 'Power BI', 'Tableau'], icon: 'chart' },
+  { title: 'DevOps', duration: '3–4 months', summary: 'Linux, Git, CI/CD, Docker, Kubernetes, infrastructure as code, monitoring, cloud', tags: ['Jenkins', 'Docker', 'Kubernetes', 'Terraform'], icon: 'infinity' },
+  { title: 'Python for Data Science', duration: '2 months', summary: 'Python basics, NumPy, Pandas, visualisation and an introduction to ML', tags: ['Python', 'NumPy', 'Matplotlib', 'Seaborn'], icon: 'flask' },
+  { title: 'Python Programming', duration: '6–8 weeks', summary: 'Syntax, data structures, OOP, files, modules, exceptions and mini projects', tags: ['Python', 'VS Code', 'Git'], icon: 'terminal' },
+  { title: 'Web Development with Django', duration: '3 months', summary: 'HTML/CSS/JS basics, Django MVT, ORM, authentication, REST APIs, deployment', tags: ['Django', 'DRF', 'PostgreSQL', 'Git'], icon: 'globe' },
 ];
 
-export const MISSION = [
-  'To facilitate quality research publication through appropriate peer-reviewed journals.',
-  'To support researchers in identifying suitable SCI/Scopus-indexed publication opportunities.',
-  'To promote genuine research collaboration among academicians and researchers.',
-  'To provide industry-oriented software training and internship programs.',
-  'To develop practical skills in emerging technologies.',
-  'To support institutions and individuals in strengthening their research and technical capabilities.',
-  'To maintain transparency, research integrity and professional standards in all our services.',
+export const TRAINING_MODES = [
+  { title: 'Online live', text: 'Zoom / Meet classes with recordings', icon: 'monitor', color: 'c-blue' },
+  { title: 'Classroom', text: 'In-person at our Pune centre', icon: 'school', color: 'c-teal' },
+  { title: 'Weekend', text: 'Sat–Sun for working people', icon: 'calendar', color: 'c-orange' },
+  { title: 'Fast-track', text: 'Daily intensive batches', icon: 'zap', color: 'c-pink' },
+  { title: 'Corporate / College', text: 'Custom workshops and FDPs', icon: 'building', color: 'c-violet' },
 ];
 
-export const RESEARCH_AREAS = [
-  { title: 'Artificial Intelligence & Machine Learning', icon: 'cpu' },
-  { title: 'Data Science & Big Data', icon: 'database' },
-  { title: 'Computer Science & Engineering', icon: 'code' },
-  { title: 'Information Technology', icon: 'layers' },
-  { title: 'Internet of Things', icon: 'wifi' },
-  { title: 'Cloud Computing', icon: 'cloud' },
-  { title: 'Cybersecurity', icon: 'lock' },
-  { title: 'Computer Networks', icon: 'globe' },
-  { title: 'Software Engineering', icon: 'briefcase' },
-  { title: 'Electronics & Communication Engineering', icon: 'cpu' },
-  { title: 'Electrical Engineering', icon: 'trending' },
-  { title: 'Mechanical Engineering', icon: 'target' },
-  { title: 'Civil Engineering', icon: 'building' },
-  { title: 'Automation & Robotics', icon: 'rocket' },
-  { title: 'Emerging Technologies', icon: 'lightbulb' },
-  { title: 'Interdisciplinary Engineering', icon: 'layers' },
+export const TRAINING_INCLUDES = [
+  'Live instructor-led sessions with class recordings',
+  '2–4 capstone projects for your portfolio and GitHub',
+  'Assignments, quizzes and doubt-solving sessions',
+  'Course completion certificate with verification ID',
+  'Resume building, LinkedIn review and mock interviews',
+  'Placement assistance with interview referrals where available',
 ];
 
-export const PUBLICATION_SUPPORT = [
-  'Research paper submission guidance',
-  'Manuscript formatting according to journal guidelines',
-  'Technical and language-quality checking',
-  'Reference and citation formatting',
-  'Similarity/plagiarism screening support',
-  'Editorial pre-screening',
-  'Peer-review coordination',
-  'Reviewer-comment and revision guidance',
-  'Final manuscript preparation',
-  'Publication-process assistance',
-  'Author communication and publication-status updates',
-  'E-certificate/publication documentation, where applicable',
-];
-
-export const PUBLICATION_PROCESS = [
-  'Manuscript Preparation', 'Online Submission', 'Editorial Screening', 'Peer Review',
-  'Revision, if Required', 'Final Editorial Decision', 'Publication', 'Author Documentation',
-];
-
-export const WHO_CAN_SUBMIT = [
-  'Faculty Members', 'Ph.D. Scholars', 'Research Scholars', 'M.Tech./M.E. Students',
-  'Undergraduate Students', 'Academicians', 'Industry Researchers', 'Independent Researchers',
-];
-
-export const WHY_IJEPA = [
-  { icon: 'target', title: 'Dedicated Engineering & Technology Platform', text: 'A publication platform focused on engineering, technology and interdisciplinary research.' },
-  { icon: 'shieldCheck', title: 'Peer-Review Process', text: "Manuscripts are subjected to the journal's editorial and peer-review procedures." },
-  { icon: 'users', title: 'Author Support', text: 'Authors receive guidance regarding formatting, submission and revision requirements.' },
-  { icon: 'layers', title: 'Multidisciplinary Scope', text: 'Research contributions from diverse engineering and technology domains can be considered.' },
-  { icon: 'check', title: 'Professional Publication Process', text: 'A structured workflow from manuscript submission through editorial decision and publication.' },
-];
-
-export const COLLAB_FLOW = [
-  'Browse Available Research Topics', 'Select a Research Topic', 'Discuss Your Research Contribution',
-  'Finalize Collaboration & Scope', 'Research Implementation & Manuscript Development',
-  'Journal Selection & Submission', 'Peer Review & Revision', 'Publication, if Accepted',
-];
-
-// TODO (client): replace the placeholder titles, durations and fees with the real research list.
-export const COLLAB_TOPICS = [
-  { id: 1, title: 'Research Title 1', area: 'AI/ML', index: 'Scopus', duration: '4–6 Months', fee: '₹XX,XXX', status: 'Available' },
-  { id: 2, title: 'Research Title 2', area: 'Data Science', index: 'Scopus', duration: '4–6 Months', fee: '₹XX,XXX', status: 'Available' },
-  { id: 3, title: 'Research Title 3', area: 'Cybersecurity', index: 'Scopus/SCI', duration: '5–7 Months', fee: '₹XX,XXX', status: 'Available' },
-  { id: 4, title: 'Research Title 4', area: 'IoT', index: 'Scopus', duration: '4–6 Months', fee: '₹XX,XXX', status: 'Available' },
-  { id: 5, title: 'Research Title 5', area: 'Generative AI', index: 'Scopus/SCI', duration: '5–8 Months', fee: '₹XX,XXX', status: 'Available' },
-  { id: 6, title: 'Research Title 6', area: 'Computer Vision', index: 'Scopus', duration: '4–6 Months', fee: '₹XX,XXX', status: 'Available' },
-];
-
-export const COLLAB_INCLUDES = [
-  'Research problem identification', 'Literature review', 'Research-gap analysis', 'Research methodology',
-  'Dataset preparation', 'Algorithm development', 'Software implementation', 'Experimental work',
-  'Results and performance analysis', 'Research-paper preparation', 'Technical editing', 'Journal identification',
-  'Manuscript submission', 'Reviewer-response preparation', 'Manuscript revision', 'Publication-process support',
-];
-
-export const PACKAGES = [
-  {
-    letter: 'Package A', title: 'Research Contributor',
-    forWho: 'For researchers who want to contribute to an ongoing research project',
-    includes: ['Research topic selection', 'Research collaboration', 'Literature-review participation', 'Technical contribution', 'Research meetings/discussions', 'Manuscript contribution', 'Publication-support guidance'],
-    duration: '3–6 Months', fee: 'Starting from ₹XX,XXX', cta: 'View Available Topics', to: '/services/research-collaboration#topics',
-  },
-  {
-    letter: 'Package B', title: 'Technical Research Collaboration', featured: true,
-    forWho: 'For researchers interested in technical implementation and research development',
-    includes: ['Research-gap identification', 'Methodology development', 'Programming/implementation', 'Dataset preparation', 'Experiments', 'Results analysis', 'Manuscript development', 'Journal-selection support', 'Submission support'],
-    duration: '4–8 Months', fee: 'Starting from ₹XX,XXX', cta: 'Explore Research Projects', to: '/services/research-collaboration#topics',
-  },
-  {
-    letter: 'Package C', title: 'Advanced Research Collaboration',
-    forWho: 'For researchers seeking deeper involvement in SCI/SCIE/Scopus-oriented research',
-    includes: ['Advanced research methodology', 'Novel algorithm/model development', 'Experimental validation', 'Research manuscript development', 'Technical revision', 'Target-journal analysis', 'Submission support', 'Reviewer-response support', 'Revision assistance'],
-    duration: '6–12 Months', fee: 'Based on Research Scope', cta: 'Discuss Your Research', to: '/contact',
-  },
-];
-
-export const COLLAB_DISCLAIMER =
-  'Disclaimer: BuildSoftTech provides research collaboration, technical research and publication-support services. Journal acceptance, indexing status, publication timelines and editorial decisions are controlled by the respective journals and publishers. Authorship is based on genuine scholarly contribution and the policies of the target journal. Payment of a professional service fee does not guarantee authorship, a specific author position, manuscript acceptance, publication or indexing.';
-
-export const INTERNSHIP_INCLUDES = [
-  '45 days of structured training', 'Technology-specific practical sessions', 'Hands-on programming exercises',
-  'Real-world/project-based learning', 'Guided project development', 'Mentor support', 'Technical assignments',
-  'Project documentation guidance', 'Project demonstration/presentation', 'Performance evaluation',
-  'Internship Completion Certificate', 'Project Experience Certificate/Documentation, where applicable',
-];
-
-export const INTERNSHIP_TIMELINE = [
-  { label: 'Day 1–5', title: 'Orientation & Technology Fundamentals', text: 'Introduction to the selected technology, development environment, tools and project requirements.' },
-  { label: 'Day 6–15', title: 'Technical Training', text: 'Hands-on learning through structured sessions, demonstrations and practical assignments.' },
-  { label: 'Day 16–30', title: 'Project Development', text: 'Students work on a guided project and apply the concepts learned during training.' },
-  { label: 'Day 31–40', title: 'Advanced Implementation', text: 'Project enhancement, testing, debugging, documentation and result analysis.' },
-  { label: 'Day 41–45', title: 'Final Evaluation & Presentation', text: 'Project demonstration, technical presentation, evaluation and completion formalities.' },
-];
-
-export const INTERNSHIP_DOMAINS = [
-  { icon: 'code', title: 'Software Development', items: ['Python Programming', 'Java Programming', 'Web Development', 'Full Stack Development', 'Software Engineering'] },
-  { icon: 'cpu', title: 'Artificial Intelligence & Data', items: ['Artificial Intelligence', 'Machine Learning', 'Data Science', 'Data Analytics', 'Deep Learning', 'Generative AI'] },
-  { icon: 'cloud', title: 'Emerging Technologies', items: ['Cloud Computing', 'DevOps', 'Cybersecurity', 'Internet of Things', 'Computer Vision', 'Natural Language Processing'] },
-];
-
-export const INTERNSHIP_GAINS = [
-  { icon: 'code', title: 'Practical Technical Skills', text: 'Students get an opportunity to apply classroom knowledge to practical development tasks.' },
-  { icon: 'briefcase', title: 'Project Experience', text: 'Each student works on a structured project relevant to the selected technology/domain.' },
-  { icon: 'trending', title: 'Industry-Oriented Exposure', text: 'Students become familiar with development tools, coding practices, documentation and project workflows.' },
-  { icon: 'layers', title: 'Portfolio Development', text: 'Students can use their project experience as part of their academic and professional portfolio, subject to applicable institutional requirements.' },
-  { icon: 'award', title: 'Internship Certificate', text: 'Successful completion is accompanied by an Internship Completion Certificate issued by BuildSoftTech, subject to fulfilment of the program requirements.' },
+export const DS_SYLLABUS = [
+  'Python for Data Science', 'Statistics and Probability', 'Data Wrangling and EDA', 'Data Visualisation',
+  'ML: Regression, Classification, Clustering', 'Model Evaluation and Feature Engineering',
+  'Deep Learning and Neural Networks', 'NLP and Generative AI basics', 'Deployment with Flask / Streamlit', 'Capstone Project',
 ];
 
 export const INTERNSHIP_HIGHLIGHTS = [
-  ['Program Type', 'Paid Internship'], ['Duration', '45 Days'], ['Fee', '₹3,000/-'], ['Mode', 'Online / Offline / Hybrid*'],
-  ['Training', 'Technology-specific practical training'], ['Project', 'Guided project development'], ['Mentoring', 'Technical mentor support'],
-  ['Evaluation', 'Assignment + Project Evaluation'], ['Certificate', 'Internship Completion Certificate'], ['Target Audience', 'UG / PG / Diploma / Engineering Students'],
+  'Duration: 45 days minimum, or 2, 3 or 6 months',
+  'Online, offline or hybrid',
+  '1 major + 2 mini live projects',
+  'Weekly mentor reviews and progress reports',
+  'Offer letter on joining',
+  'Completion certificate with verification ID',
+  'Letter of recommendation for top performers',
+  'Project report support for college submission',
 ];
 
-export const INTERNSHIP_ELIGIBLE = [
-  'B.E./B.Tech students', 'M.E./M.Tech students', 'BCA/MCA students', 'B.Sc./M.Sc. students', 'Diploma students',
-  'Computer Science students', 'IT students', 'Engineering students from related disciplines', 'Students interested in emerging technologies',
+export const INTERNSHIP_DOMAINS = [
+  { title: 'Data Science & ML', icon: 'brain', color: 'c-blue' },
+  { title: 'Data Analytics', icon: 'chart', color: 'c-violet' },
+  { title: 'Data Engineering', icon: 'database', color: 'c-teal' },
+  { title: 'DevOps & Cloud', icon: 'cloud', color: 'c-orange' },
+  { title: 'Python Development', icon: 'terminal', color: 'c-sun' },
+  { title: 'Full-Stack Django', icon: 'globe', color: 'c-pink' },
+  { title: 'AI / Generative AI', icon: 'sparkles', color: 'c-blue' },
+  { title: 'Blockchain Development', icon: 'blocks', color: 'c-teal' },
 ];
 
-export const COURSES = [
-  { icon: 'code', title: 'Python Programming', items: ['Python Fundamentals', 'Object-Oriented Programming', 'Libraries & Frameworks', 'Data Handling', 'Automation', 'Mini Projects'] },
-  { icon: 'database', title: 'Data Science', items: ['Python for Data Science', 'NumPy', 'Pandas', 'Data Visualization', 'Statistics', 'Machine Learning', 'Real-world Projects'] },
-  { icon: 'cpu', title: 'Artificial Intelligence & Machine Learning', items: ['ML Fundamentals', 'Supervised Learning', 'Unsupervised Learning', 'Feature Engineering', 'Model Evaluation', 'Deep Learning', 'AI Projects'] },
-  { icon: 'layers', title: 'Full Stack Development', items: ['HTML', 'CSS', 'JavaScript', 'Front-End Development', 'Backend Development', 'Database', 'API Development', 'Deployment'] },
-  { icon: 'cloud', title: 'Cloud & DevOps', items: ['Cloud Fundamentals', 'Linux', 'Git & GitHub', 'CI/CD', 'Docker', 'Cloud Deployment', 'DevOps Practices'] },
-  { icon: 'lock', title: 'Cybersecurity', items: ['Cybersecurity Fundamentals', 'Network Security', 'Web Security', 'Vulnerability Assessment', 'Security Tools', 'Ethical Security Practices'] },
+export const INTERNSHIP_STEPS = [
+  ['Apply online', 'Choose your domain'],
+  ['Orientation call', 'Short screening chat'],
+  ['Offer letter', 'Onboarding kit'],
+  ['Learn & build', 'Weekly tasks'],
+  ['Final review', 'Project presentation'],
+  ['Certificate', 'Plus project report'],
 ];
 
-export const RESEARCH_SUPPORT = [
-  { icon: 'lightbulb', title: 'Research Idea Development', text: 'We help researchers convert broad interests into focused research problems.', items: [] },
-  { icon: 'bookOpen', title: 'Literature Review', text: 'Support for:', items: ['Literature search strategy', 'Research-paper analysis', 'Literature classification', 'Research-gap identification', 'Citation management'] },
-  { icon: 'target', title: 'Research Methodology', text: 'Support for:', items: ['Problem formulation', 'Research objectives', 'Hypothesis development', 'Methodology design', 'Algorithm selection', 'Experimental design'] },
-  { icon: 'code', title: 'Implementation Support', text: '', items: ['Python implementation', 'Machine Learning', 'Deep Learning', 'Data Analytics', 'IoT', 'Simulation', 'Web/mobile applications', 'Cloud implementation'] },
-  { icon: 'trending', title: 'Results & Analysis', text: '', items: ['Experimental analysis', 'Performance comparison', 'Statistical analysis', 'Graphs and visualization', 'Result interpretation', 'Discussion development'] },
+export const JOURNAL_SERVICES = [
+  'Topic selection and literature review guidance',
+  'Methodology, data analysis and result interpretation support',
+  'Manuscript structuring (IMRaD) and English editing',
+  'Plagiarism and AI-content check report',
+  'Journal selection by scope, indexing (SCI/SCIE, Scopus, ESCI, WoS) and timeline',
+  'Formatting to journal template, reference styling',
+  'Cover letter and submission assistance',
+  'Point-by-point reviewer response and revisions',
+];
+
+export const COLLABORATION = [
+  'Matches researchers with mentors and co-researchers who bring complementary expertise',
+  'Every co-author makes a real intellectual contribution, following COPE and ICMJE',
+  'Contribution statement (CRediT) agreed in writing before work starts',
+  'We never sell or trade authorship positions',
+];
+
+export const CONFERENCE_SERVICES = [
+  'Alerts for upcoming IEEE, Springer (LNNS, LNEE, AISC, CCIS) and other indexed conferences',
+  'Writing and formatting in IEEE / Springer LNCS templates',
+  'IEEE PDF eXpress compatibility check',
+  'Similarity reduction through proper rewriting and citation',
+  'Registration and camera-ready submission guidance',
+  'Presentation slides and video preparation',
+];
+
+export const CHAPTER_SERVICES = [
+  'Tracking open chapter calls from publishers such as Bentham Science, IGI Global, CRC Press (Taylor & Francis), Springer, Elsevier, Wiley and De Gruyter',
+  'Chapter proposal (abstract) writing and submission',
+  'Full chapter writing guidance, editing and formatting',
+  'Copyright form and author agreement assistance',
+];
+
+export const BOOK_SERVICES = [
+  'Textbooks, reference books, edited books, thesis-to-book',
+  'ISBN allotment through the national ISBN agency',
+  'Editing, proofreading, typesetting and cover design',
+  'Paperback, hardcover and e-book editions',
+  'Listing on Amazon, Flipkart and Google Books',
+  'Copyright and author agreement support',
+];
+
+export const BOOK_PACKAGES = [
+  { name: 'Basic', text: 'E-book + ISBN', color: 'c-teal' },
+  { name: 'Standard', text: 'Print + e-book + ISBN', color: 'c-blue' },
+  { name: 'Premium', text: 'Standard + cover design + online listing', color: 'c-orange' },
+];
+
+export const PATENT_SERVICES = [
+  'Free invention discussion under NDA',
+  'Prior-art / patentability search report',
+  'Provisional specification drafting',
+  'Complete specification with claims and drawings',
+  'Filing via a registered patent agent (startup / small entity / institution rates)',
+  'Request for early publication',
+  'Request for examination, including expedited',
+  'First Examination Report (FER) response and hearing support',
+  'Grant follow-up and renewal reminders',
+  'Design and copyright registration support',
+  'International (PCT) filing guidance',
+];
+
+export const PATENT_STEPS = [
+  ['Idea & NDA', 'Confidential discussion'],
+  ['Search', 'Patentability report'],
+  ['Drafting', 'Provisional or complete'],
+  ['Filing', 'Indian Patent Office'],
+  ['Publication', 'Patent Journal'],
+  ['Examination', 'FER response'],
+  ['Grant', 'Decided by Patent Office'],
+];
+
+export const CORE_VALUES = [
+  { title: 'Integrity', text: 'Honest guidance and ethical research practice.', icon: 'shield', color: 'c-blue' },
+  { title: 'Practical learning', text: 'Every concept backed by hands-on projects.', icon: 'laptop', color: 'c-teal' },
+  { title: 'Learner first', text: 'Small batches, doubt-solving and mentoring.', icon: 'heart', color: 'c-orange' },
+  { title: 'Quality', text: 'Original work, plagiarism-free content, timely delivery.', icon: 'award', color: 'c-violet' },
+  { title: 'Confidentiality', text: 'Your research ideas and data stay protected.', icon: 'lock', color: 'c-pink' },
+];
+
+export const AUDIENCES = [
+  'UG / PG students (B.E., B.Tech, BCA, MCA, M.E., M.Tech, B.Sc, M.Sc)',
+  'Fresh graduates and job seekers',
+  'Working professionals moving into data or DevOps roles',
+  'Ph.D. scholars and faculty members',
+  'Colleges and universities (FDPs, workshops, corporate training)',
 ];
 
 export const WHY_US = [
-  { icon: 'flask', title: 'Research-Focused', text: 'Our services are designed specifically for the academic and research community.' },
-  { icon: 'cpu', title: 'Technology Expertise', text: 'We combine academic research knowledge with practical technology skills.' },
-  { icon: 'layers', title: 'End-to-End Support', text: 'From research idea to implementation and publication support, we provide assistance throughout the journey.' },
-  { icon: 'shieldCheck', title: 'Ethical Approach', text: 'We emphasise originality, transparency, responsible authorship and research integrity, in line with the UGC academic-integrity framework.' },
-  { icon: 'user', title: 'Personalized Guidance', text: "Every research project has different requirements. We provide customised guidance based on the researcher's objectives." },
-  { icon: 'code', title: 'Practical Learning', text: 'Our training and internship programs focus on hands-on projects and real-world applications.' },
-  { icon: 'fileText', title: 'Professional Documentation', text: 'We assist with research manuscripts, technical reports, project documentation and related academic materials.' },
-];
-
-export const WORKFLOW = [
-  { title: 'Consultation', text: 'Discuss your research topic, objectives and requirements.' },
-  { title: 'Research Assessment', text: 'Evaluate research scope, novelty, methodology and publication suitability.' },
-  { title: 'Research Development', text: 'Support literature review, methodology, implementation and analysis.' },
-  { title: 'Manuscript Preparation', text: 'Prepare and refine the research manuscript according to the target journal requirements.' },
-  { title: 'Quality Check', text: 'Technical review, formatting, references and similarity screening.' },
-  { title: 'Journal Selection', text: 'Identify suitable journals based on scope, publication requirements and current indexing information.' },
-  { title: 'Submission', text: 'Assist with the journal submission process.' },
-  { title: 'Peer Review & Revision', text: 'Support responses to reviewer comments and manuscript revisions.' },
-  { title: 'Publication', text: 'Assist with final publication formalities after editorial acceptance.' },
-];
-
-export const FACULTY_SERVICES = [
-  'Research topic consultation', 'Research collaboration', 'Manuscript development', 'Journal selection', 'SCI/Scopus publication support',
-  'Technical implementation', 'Research project development', 'Literature review support', 'Data analysis', 'Reviewer-response support',
-  'Research profile development', 'Software and AI training',
-];
-export const FACULTY_OUTPUT = [
-  'Faculty appraisal', 'Promotion documentation', 'Research profile', 'Departmental research records',
-  'Institutional research output', 'NBA documentation', 'NAAC documentation', 'NIRF-related institutional reporting',
-];
-export const STUDENT_SERVICES = [
-  'Software training', 'Internship programs', 'Final-year projects', 'Mini projects', 'AI/ML projects', 'Web development projects',
-  'Data Science projects', 'IoT projects', 'Project documentation', 'Technical presentations', 'Research-paper development', 'Career-oriented skill development',
-];
-export const SCHOLAR_SERVICES = [
-  'Research problem identification', 'Literature survey', 'Research-gap analysis', 'Methodology', 'Algorithm development', 'Implementation',
-  'Dataset preparation', 'Experimental evaluation', 'Research writing', 'Journal selection', 'Reviewer response', 'Publication support',
-];
-export const INSTITUTIONAL_PROGRAMS = [
-  { icon: 'graduation', title: 'Faculty Development Programs', items: ['AI & Machine Learning', 'Data Science', 'Generative AI', 'Python', 'Cybersecurity', 'Cloud Computing', 'Research Methodology', 'Academic Writing', 'Research Publication'] },
-  { icon: 'user', title: 'Student Training Programs', items: ['Value-added courses', 'Technical workshops', 'Bootcamps', 'Internship programs', 'Project-based learning', 'Certification programs'] },
-  { icon: 'flask', title: 'Research Development Programs', items: ['Research methodology workshops', 'Research writing workshops', 'Scopus/SCI publication awareness', 'Research implementation workshops', 'Grant proposal guidance', 'Collaborative research programs'] },
-  { icon: 'building', title: 'Department-Level Programs', items: ['Skill-development programs', 'Industry-oriented training', 'Project mentoring', 'Research cells / R&D support', 'Faculty research mentoring'] },
-];
-
-export const INTEGRITY_YES = [
-  'Original research', 'Proper citation', 'Responsible use of AI tools', 'Transparent authorship', 'Appropriate data usage',
-  'Ethical research practices', 'Proper acknowledgment of contributors', 'Compliance with journal policies', 'Compliance with institutional research policies',
-];
-export const INTEGRITY_NO = [
-  'Fabricated research results', 'Fake data', 'Fake citations', 'Plagiarism', 'Duplicate publication',
-  'Manipulation of research results', 'False authorship', 'Guaranteed acceptance claims', 'Misrepresentation of journal indexing',
+  { title: 'Experienced mentors', text: 'Trainers with industry, teaching and research backgrounds.', icon: 'users', color: 'c-blue' },
+  { title: 'Project-based learning', text: 'Real datasets, real tools, portfolio-ready projects.', icon: 'laptop', color: 'c-teal' },
+  { title: 'Flexible batches', text: 'Online, classroom and weekend options.', icon: 'calendar', color: 'c-orange' },
+  { title: 'Ethical research guidance', text: 'Transparent process, no shortcuts, no false promises.', icon: 'shield', color: 'c-violet' },
+  { title: 'Verifiable certificates', text: 'Every certificate carries a unique verification ID.', icon: 'award', color: 'c-pink' },
+  { title: 'Placement assistance', text: 'Resume building, mock interviews and referrals.', icon: 'target', color: 'c-sun' },
 ];
 
 export const FAQS = [
-  { q: 'Do you guarantee journal publication?', a: "No. We provide professional research and publication support, but the final decision rests with the journal's editor and peer reviewers." },
-  { q: 'Do you guarantee Scopus/SCI publication?', a: "No. We identify potentially suitable journals based on available information and provide publication support. Acceptance depends on the journal's editorial and peer-review process." },
-  { q: 'Can you help with research implementation?', a: 'Yes. We provide implementation support in areas including AI/ML, Data Science, Python, IoT, Cloud Computing, Cybersecurity and other technology domains.' },
-  { q: 'Can faculty members collaborate on research papers?', a: 'Yes. We facilitate genuine research collaboration. Authorship must be based on actual scholarly contribution and the policies of the target journal.' },
-  { q: 'Do you provide internships?', a: 'Yes. We provide structured internship programs with technology training, project development, mentoring, evaluation and completion documentation.' },
-  { q: 'Do you provide software courses?', a: 'Yes. Training programs can be customised for students, faculty members, professionals and institutions.' },
-  { q: 'Can you organize training programs for colleges?', a: 'Yes. BuildSoftTech can conduct workshops, FDPs, bootcamps, internships, value-added courses and customised technical training programs.' },
-  { q: 'Do you provide plagiarism checking?', a: 'We provide similarity-screening and manuscript-improvement support. Authors remain responsible for proper citation and research originality.' },
+  {
+    group: 'Training', color: 'var(--brand)', items: [
+      ['Do I need a programming background?', 'No. Python Programming and Data Analytics start from basics. Advanced courses list their prerequisites.'],
+      ['Are class recordings available?', 'Yes, for all online batches.'],
+      ['Do you provide placement?', 'We provide placement assistance (resume, mock interviews and referrals) but do not guarantee jobs.'],
+      ['Can I pay in instalments?', 'Yes, instalment options are available on most courses.'],
+    ],
+  },
+  {
+    group: 'Internship', color: 'var(--teal)', items: [
+      ['Is the certificate valid for college submission?', 'Yes. You receive an offer letter, a completion certificate with verification ID and a project report.'],
+      ['Can I do the internship online?', 'Yes. Online, offline and hybrid modes are available.'],
+    ],
+  },
+  {
+    group: 'Research & publication', color: 'var(--violet)', items: [
+      ['Do you guarantee publication?', 'No. Acceptance is decided by the journal’s independent peer review. We improve your chances through quality writing, correct journal selection and strong revisions.'],
+      ['Will you write my paper for me?', 'We guide, edit and mentor. The research ideas, data and conclusions must be your own work.'],
+      ['How do you check a journal is genuine?', 'We check the Scopus source list, the Web of Science Master Journal List and the UGC-CARE list before recommending any journal.'],
+      ['Is my research kept confidential?', 'Yes. We sign an NDA on request and never share your work.'],
+    ],
+  },
+  {
+    group: 'Patents', color: 'var(--orange)', items: [
+      ['How long does a patent grant take?', 'Usually 2–5 years; expedited examination can shorten this where eligible.'],
+      ['Who files the patent?', 'A registered patent agent files on your behalf.'],
+    ],
+  },
+];
+
+export const POLICIES = [
+  {
+    id: 'ethics', title: 'Publication ethics policy', items: [
+      'We follow COPE and ICMJE guidelines.',
+      'We do not ghost-write papers, fabricate or manipulate data, or sell authorship.',
+      'Authorship is given only for real contributions, documented in a contribution statement.',
+      'We recommend only journals verified in Scopus, Web of Science or UGC-CARE lists, and avoid predatory and cloned journals.',
+      'Clients are responsible for the originality of their ideas, data and results.',
+    ],
+  },
+  {
+    id: 'disclaimer', title: 'Disclaimer', items: [
+      'BuildSoftTech provides guidance, training and editorial support. Acceptance is decided by journals, conferences and publishers; patent grants by the Patent Office.',
+      'BuildSoftTech is not affiliated with IEEE, Springer, Elsevier, Bentham Science, IGI Global, CRC Press or any indexing agency. Names are used only to describe venues.',
+      'Placement assistance does not guarantee employment.',
+    ],
+  },
+  {
+    id: 'privacy', title: 'Privacy policy', items: [
+      'We collect name, contact details and uploaded documents only to deliver our services.',
+      'We do not sell personal data. We share it only with payment gateways and partners needed to deliver the service.',
+      'Manuscripts and invention details are kept confidential.',
+      'Data is handled in line with India’s Digital Personal Data Protection Act, 2023. Email {email} to access or delete your data.',
+    ],
+  },
+  {
+    id: 'refund', title: 'Refund & cancellation policy', items: [
+      'Training: full refund before the batch starts; [50%] within the first [7] days; none after that.',
+      'Internship: refund within [3] days of joining, minus a registration fee of ₹[XXX].',
+      'Research and patent services: refund for work not yet started. Government, publisher (APC) and registration fees are non-refundable.',
+      'Refunds are processed within [7–10] working days.',
+    ],
+  },
+  {
+    id: 'terms', title: 'Terms & conditions', items: [
+      'Fees are payable as per the agreed schedule.',
+      'Course content and materials are for personal use only.',
+      'Certificates are issued after meeting attendance and project requirements.',
+      'BuildSoftTech may reschedule batches with prior notice.',
+      'Disputes are subject to the jurisdiction of courts in Pune, Maharashtra.',
+    ],
+  },
 ];
