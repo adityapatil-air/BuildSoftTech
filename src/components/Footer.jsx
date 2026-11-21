@@ -31,6 +31,7 @@ const COLS = [
       ['/research#conference', 'IEEE / Springer Conferences'],
       ['/research#chapter', 'Book Chapters'],
       ['/research#book', 'Books with ISBN'],
+      ['/books', 'Become an author'],
       ['/patents', 'Patents'],
       [IJEPA.url, 'IJEPA Journal ↗'],
     ],

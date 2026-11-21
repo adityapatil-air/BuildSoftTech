@@ -6,6 +6,7 @@ import Icon from '../Icon';
 
 const SECTIONS = [
   { id: 'courses', label: 'Courses & fees', icon: 'code' },
+  { id: 'authorBooks', label: 'Author books', icon: 'book' },
   { id: 'internshipPlans', label: 'Internship plans', icon: 'briefcase' },
   { id: 'researchPackages', label: 'Research packages', icon: 'book' },
   { id: 'patentPlans', label: 'Patent plans', icon: 'lightbulb' },
@@ -30,10 +31,12 @@ const Field = ({ label, value, onChange, hint, type = 'text', textarea, full, pl
 const toLines = (v) => v.split('\n');
 const toTags = (v) => v.split(',');
 
-const AdminDashboard = ({ initial }) => {
+const NEW_BOOK = { title: '', role: '', details: '', price: '', status: 'open' };
+
+const AdminDashboard = ({ initial, initialSection }) => {
   const router = useRouter();
   const [settings, setSettings] = useState(initial);
-  const [section, setSection] = useState('courses');
+  const [section, setSection] = useState(SECTIONS.some((s) => s.id === initialSection) ? initialSection : 'courses');
   const [status, setStatus] = useState(null);
   const [saving, setSaving] = useState(false);
   const dirty = useMemo(() => JSON.stringify(settings) !== JSON.stringify(initial), [settings, initial]);
@@ -147,6 +150,46 @@ const AdminDashboard = ({ initial }) => {
               </div>
             ))}
             <button type="button" className="button button-light" onClick={() => addRow('courses', { title: '', duration: '', summary: '', tags: [], icon: 'code', fee: '' })}><Icon name="plus" size={14} /> Add course</button>
+          </>
+        )}
+
+        {section === 'authorBooks' && (
+          <>
+            <p className="form-hint" style={{ marginBottom: 14 }}>
+              Books listed on the <a href="/books" target="_blank" rel="noreferrer">Become an author</a> page. Visitors contact you by phone, email or WhatsApp (from Contact &amp; social).
+              Mark a book as sold when its author places are filled; it stays on the page as “Sold out”. Delete it to remove it completely. Remember to save.
+            </p>
+            {!settings.authorBooks.length && <div className="portal-empty" style={{ marginBottom: 16 }}><p>No books yet. Add the first one below.</p></div>}
+            {settings.authorBooks.map((b, i) => {
+              const sold = b.status === 'sold';
+              return (
+                <div className="admin-card" key={i}>
+                  <div className="admin-card-head">
+                    <strong>{b.title || `Book ${i + 1}`} <span className={`tag ${sold ? 'is-danger' : 'is-success'}`} style={{ marginLeft: 8 }}>{sold ? 'Sold' : 'Open'}</span></strong>
+                    <div className="row-actions">
+                      <button type="button" className="button button-light button-small" onClick={() => set(['authorBooks', i, 'status'], sold ? 'open' : 'sold')}>{sold ? 'Mark as open' : 'Mark as sold'}</button>
+                      <button type="button" className="admin-icon-btn" onClick={() => moveRow('authorBooks', i, -1)} aria-label="Move up">↑</button>
+                      <button type="button" className="admin-icon-btn" onClick={() => moveRow('authorBooks', i, 1)} aria-label="Move down">↓</button>
+                      <button type="button" className="admin-icon-btn is-danger" onClick={() => { if (window.confirm(`Delete “${b.title || 'this book'}”?`)) removeRow('authorBooks', i); }} aria-label="Delete book"><Icon name="x" size={14} /></button>
+                    </div>
+                  </div>
+                  <div className="form-grid">
+                    <Field label="Book title" value={b.title} onChange={(v) => set(['authorBooks', i, 'title'], v)} placeholder="Advances in Machine Learning Applications" />
+                    <Field label="Price to become an author" value={b.price} onChange={(v) => set(['authorBooks', i, 'price'], v)} placeholder="₹ 3,000" hint="Leave empty to show “Price on request”." />
+                    <Field label="Author type" value={b.role} onChange={(v) => set(['authorBooks', i, 'role'], v)} placeholder="Chapter author / Co-author" hint="Optional." />
+                    <div className="form-group">
+                      <label>Status</label>
+                      <select className="form-select" value={sold ? 'sold' : 'open'} onChange={(e) => set(['authorBooks', i, 'status'], e.target.value)}>
+                        <option value="open">Open: taking authors</option>
+                        <option value="sold">Sold out</option>
+                      </select>
+                    </div>
+                    <Field full label="Details" value={b.details} onChange={(v) => set(['authorBooks', i, 'details'], v)} textarea placeholder="Publisher, ISBN, subject area, chapter topics, last date, what the price includes…" />
+                  </div>
+                </div>
+              );
+            })}
+            <button type="button" className="button button-light" onClick={() => addRow('authorBooks', { ...NEW_BOOK })}><Icon name="plus" size={14} /> Add new book</button>
           </>
         )}
 

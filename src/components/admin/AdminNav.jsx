@@ -7,7 +7,8 @@ import Icon from '../Icon';
 
 const ITEMS = [
   { href: '/admin', label: 'Overview & settings', icon: 'edit', exact: true },
-  { href: '/admin/courses', label: 'Courses', icon: 'book' },
+  { href: '/admin?tab=authorBooks', label: 'Author books', icon: 'book' },
+  { href: '/admin/courses', label: 'Courses', icon: 'graduation' },
   { href: '/admin/internships', label: 'Internships', icon: 'briefcase' },
   { href: '/admin/students', label: 'Students', icon: 'users' },
   { href: '/admin/enquiries', label: 'Enquiries', icon: 'mail' },
@@ -18,7 +19,7 @@ const AdminNav = () => {
   return (
     <nav>
       {ITEMS.map((it) => {
-        const active = it.exact ? pathname === it.href : pathname.startsWith(it.href);
+        const active = it.href.includes('?') ? false : it.exact ? pathname === it.href : pathname.startsWith(it.href);
         return (
           <Link key={it.href} href={it.href} className={active ? 'is-active' : ''}>
             <Icon name={it.icon} size={16} /> {it.label}

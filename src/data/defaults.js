@@ -46,6 +46,8 @@ export const DEFAULT_SETTINGS = {
     { name: 'Complete Filing & Publication', fee: '', features: ['Complete specification', 'Filing', 'Early publication'], featured: true },
     { name: 'End-to-End Grant Support', fee: '', features: ['Everything in Complete', 'Examination request', 'FER response + hearing'], featured: false },
   ],
+  // "Become an author" books on /books. status: 'open' or 'sold'. Empty list = page shows a contact note.
+  authorBooks: [],
   // Real reviews only, shared with the learner's permission. Empty = section hidden.
   testimonials: [],
   updatedAt: null,
@@ -77,6 +79,7 @@ export function mergeSettings(saved) {
     researchPackages: filled(saved, 'researchPackages'),
     patentPlans: filled(saved, 'patentPlans'),
     testimonials: list(saved, 'testimonials'),
+    authorBooks: list(saved, 'authorBooks'),
     updatedAt: saved.updatedAt || null,
   };
 }

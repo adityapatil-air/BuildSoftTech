@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 const count = async (q) => (await q).count ?? 0;
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }) {
   const { supabase } = await requireAdmin('/admin');
   const head = { count: 'exact', head: true };
   const [settings, newEnquiries, pendingCourses, pendingInterns, activeCourses, activeInterns, reviewed, interns] = await Promise.all([
@@ -43,7 +43,7 @@ export default async function AdminPage() {
           </Link>
         ))}
       </div>
-      <AdminDashboard initial={settings} backend={storageBackend()} />
+      <AdminDashboard key={String(searchParams?.tab || "")} initial={settings} initialSection={String(searchParams?.tab || "")} backend={storageBackend()} />
     </>
   );
 }

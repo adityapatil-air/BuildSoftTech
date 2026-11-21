@@ -14,6 +14,7 @@ const NAV = [
   { href: '/internship', label: 'Internship' },
   { href: '/research', label: 'Research' },
   { href: '/patents', label: 'Patents' },
+  { href: '/books', label: 'Books' },
   { href: '/faqs', label: 'FAQs' },
   { href: '/contact', label: 'Contact' },
 ];
