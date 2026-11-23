@@ -1,8 +1,10 @@
 'use server';
 
 // Public enquiry forms → public.enquiries (supabase/003_enquiries.sql).
-// Written with the service role on the server; visitors have no table access.
-import { createSupabaseAdmin } from '../../lib/supabase/server';
+// Written on the server with the service role when SUPABASE_SERVICE_ROLE_KEY is set. Without
+// it (or if that fails) it falls back to the public key, which needs the insert-only policy in
+// supabase/004_enquiries_public_insert.sql. Visitors can never read the table.
+import { createSupabaseAdmin, createSupabaseServer } from '../../lib/supabase/server';
 import { getSettings } from '../../lib/store';
 import { str } from '../../lib/forms';
 
@@ -30,10 +32,20 @@ export async function submitEnquiry(_prev, fd) {
   if (!EMAIL_RE.test(row.email)) return { ok: false, message: 'Please enter a valid email address.' };
   if (kind === 'contact' && !row.message) return { ok: false, message: 'Please write a short message.' };
 
-  const db = createSupabaseAdmin();
-  const { error } = db ? await db.from('enquiries').insert(row) : { error: { message: 'Supabase is not configured.' } };
+  let error = { message: 'Supabase is not configured.' };
+  const admin = createSupabaseAdmin();
+  if (admin) {
+    ({ error } = await admin.from('enquiries').insert(row));
+    if (error) console.error('[enquiry] service-role insert failed:', error.code, error.message);
+  } else {
+    console.error('[enquiry] SUPABASE_SERVICE_ROLE_KEY is not set; trying the public key.');
+  }
   if (error) {
-    console.error('[enquiry] save failed:', error.message);
+    const pub = createSupabaseServer();
+    if (pub) ({ error } = await pub.from('enquiries').insert(row));
+  }
+  if (error) {
+    console.error('[enquiry] save failed:', error.code, error.message);
     const { contact } = await getSettings();
     return { ok: false, message: `Sorry, we could not send this right now. Please email ${contact.email}${contact.phoneDisplay ? ` or call ${contact.phoneDisplay}` : ''}.` };
   }
