@@ -32,7 +32,7 @@ export default async function AdminStudents() {
                   <td>{s.degree || '—'}</td>
                   <td>{s.course_enrollments?.[0]?.count ?? 0}</td>
                   <td>{s.internship_enrollments?.[0]?.count ?? 0}</td>
-                  <td>{new Date(s.created_at).toLocaleDateString('en-IN')}</td>
+                  <td>{new Date(s.created_at).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}</td>
                 </tr>
               ))}
             </tbody>

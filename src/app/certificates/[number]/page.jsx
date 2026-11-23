@@ -12,7 +12,7 @@ export async function generateMetadata({ params }) {
   return { title: `Certificate ${params.number}`, robots: { index: false, follow: false } };
 }
 
-const fmt = (d) => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+const fmt = (d) => new Date(d).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric' });
 
 export default async function CertificatePage({ params }) {
   const number = decodeURIComponent(params.number || '').toUpperCase();

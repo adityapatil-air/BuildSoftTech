@@ -51,4 +51,4 @@ export const localPath = (fd, key, fallback) => {
   return v.startsWith('/') && !v.startsWith('//') ? v.split('?')[0] : fallback;
 };
 
-export const fmtDate = (d) => (d ? new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—');
+export const fmtDate = (d) => (d ? new Date(d).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' }) : '—');

@@ -81,7 +81,7 @@ export default async function DashboardPage({ searchParams }) {
               <thead><tr><th>Certificate no.</th><th>For</th><th>Issued</th><th></th></tr></thead>
               <tbody>
                 {certificates.map((c) => (
-                  <tr key={c.id}><td><strong>{c.certificate_no}</strong></td><td>{c.title} <span className="tag">{c.kind}</span></td><td>{new Date(c.issued_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td><td><Link href={`/certificates/${c.certificate_no}`} className="button button-light button-small">View</Link></td></tr>
+                  <tr key={c.id}><td><strong>{c.certificate_no}</strong></td><td>{c.title} <span className="tag">{c.kind}</span></td><td>{new Date(c.issued_at).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' })}</td><td><Link href={`/certificates/${c.certificate_no}`} className="button button-light button-small">View</Link></td></tr>
                 ))}
               </tbody>
             </table>

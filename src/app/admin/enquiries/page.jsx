@@ -10,7 +10,7 @@ const KIND = { demo: 'Demo class', internship: 'Internship', contact: 'Contact' 
 const STATUS_TAG = { new: 'is-warning', contacted: 'is-brand', closed: '' };
 const FILTERS = ['new', 'contacted', 'closed', 'all'];
 
-const when = (d) => new Date(d).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+const when = (d) => new Date(d).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' IST';
 
 export default async function AdminEnquiries({ searchParams }) {
   const { supabase } = await requireAdmin('/admin/enquiries');

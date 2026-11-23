@@ -30,7 +30,7 @@ export default async function AdminCourses({ searchParams }) {
             <tbody>
               {courses.map((c) => (
                 <tr key={c.id}>
-                  <td><strong>{c.title}</strong>{c.start_date && <><br /><small>Starts {new Date(c.start_date).toLocaleDateString('en-IN')}</small></>}</td>
+                  <td><strong>{c.title}</strong>{c.start_date && <><br /><small>Starts {new Date(c.start_date).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}</small></>}</td>
                   <td><span className="tag">{c.status}</span></td>
                   <td>{c.fee || '—'}</td>
                   <td>{c.duration || '—'}</td>
