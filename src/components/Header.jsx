@@ -6,13 +6,16 @@ import { usePathname } from 'next/navigation';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Logo } from './ui';
+import { IJEPA } from '../data/site';
 
 const NAV = [
   { href: '/', label: 'Home', exact: true },
   { href: '/about', label: 'About' },
   { href: '/training', label: 'Training' },
   { href: '/internship', label: 'Internship' },
-  { href: '/research', label: 'Research' },
+  // Client request: Research opens the IJEPA journal directly. The research services page
+  // (/research) is still linked from the home page and the footer.
+  { href: IJEPA.url, label: 'Research', external: true, note: `${IJEPA.label} is our journal for publication` },
   { href: '/patents', label: 'Patents' },
   { href: '/books', label: 'Books' },
   { href: '/faqs', label: 'FAQs' },
@@ -35,7 +38,7 @@ const Header = ({ topbar, user, profile }) => {
     return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
   }, [userOpen, open]);
 
-  const isActive = (l) => (l.exact ? pathname === l.href : pathname === l.href || pathname.startsWith(`${l.href}/`));
+  const isActive = (l) => !l.external && (l.exact ? pathname === l.href : pathname === l.href || pathname.startsWith(`${l.href}/`));
   const isAdmin = profile?.role === 'admin';
   const firstName = profile?.full_name?.split(' ')[0] || user?.email?.split('@')[0];
   const home = isAdmin ? '/admin' : '/dashboard';
@@ -57,11 +60,20 @@ const Header = ({ topbar, user, profile }) => {
           <Logo />
 
           <nav className="hidden items-center gap-5 xl:flex" aria-label="Primary">
-            {NAV.map((l) => (
+            {NAV.map((l) => (l.external ? (
+              <span key={l.href} className="group relative">
+                <a href={l.href} target="_blank" rel="noreferrer" title={l.note} className="whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+                  {l.label} <span aria-hidden="true" className="text-xs">↗</span>
+                </a>
+                <span role="tooltip" className="paper-card pointer-events-none absolute left-1/2 top-8 z-10 w-56 -translate-x-1/2 rounded-lg px-3 py-2 text-center text-xs leading-relaxed text-foreground opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
+                  <strong className="font-semibold text-primary">{IJEPA.label}</strong> is our journal for publication
+                </span>
+              </span>
+            ) : (
               <Link key={l.href} href={l.href} aria-current={isActive(l) ? 'page' : undefined} className={cn('whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground', isActive(l) && 'font-semibold text-foreground')}>
                 {l.label}
               </Link>
-            ))}
+            )))}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
@@ -95,9 +107,13 @@ const Header = ({ topbar, user, profile }) => {
         {open && (
           <nav id="mobile-nav" className="max-h-[calc(100vh-64px)] overflow-y-auto border-t border-border bg-background px-4 py-3 xl:hidden" aria-label="Mobile">
             <div className="flex flex-col gap-1">
-              {NAV.map((l) => (
+              {NAV.map((l) => (l.external ? (
+                <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary">
+                  {l.label} ↗<span className="block text-xs font-normal text-muted-foreground">{l.note}</span>
+                </a>
+              ) : (
                 <Link key={l.href} href={l.href} className={cn('rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary', isActive(l) && 'bg-secondary')}>{l.label}</Link>
-              ))}
+              )))}
               <div className="mt-2 flex flex-col gap-1 border-t border-border pt-3">
                 <Link href="/contact" className="rounded-md bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground">Free consultation</Link>
                 {user ? (

@@ -312,3 +312,23 @@ export const CourseCard = ({ course, color, icon, href }) => {
     </article>
   );
 };
+
+// Compact call / email / WhatsApp links for a table row ("Enquire about X").
+export const EnquireLinks = ({ contact, about }) => {
+  const c = contact || {};
+  const wa = waLink(c.whatsapp, `Hello, I am interested in "${about}".`);
+  const cls = 'inline-flex items-center rounded-md border border-border bg-card px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-secondary';
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {c.phoneLink && <a href={`tel:${c.phoneLink}`} className={cls}>Call</a>}
+      {c.email && <a href={`mailto:${c.email}?subject=${encodeURIComponent(`Enquiry: ${about}`)}`} className={cls}>Email</a>}
+      {wa && <a href={wa} target="_blank" rel="noreferrer" className={cls}>WhatsApp</a>}
+    </div>
+  );
+};
+
+export const StatusBadge = ({ sold, openLabel = 'Available', soldLabel = 'Sold' }) => (
+  <span className={cn('inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider', sold ? 'bg-secondary text-muted-foreground' : 'bg-accent text-accent-foreground')}>
+    {sold ? soldLabel : openLabel}
+  </span>
+);

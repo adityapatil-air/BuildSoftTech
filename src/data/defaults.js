@@ -48,6 +48,8 @@ export const DEFAULT_SETTINGS = {
   ],
   // "Become an author" books on /books. status: 'open' or 'sold'. Empty list = page shows a contact note.
   authorBooks: [],
+  // Patents listed in the table on /patents. status: 'open' or 'sold'. Empty list = table hidden.
+  patentListings: [],
   // Real reviews only, shared with the learner's permission. Empty = section hidden.
   testimonials: [],
   updatedAt: null,
@@ -80,6 +82,7 @@ export function mergeSettings(saved) {
     patentPlans: filled(saved, 'patentPlans'),
     testimonials: list(saved, 'testimonials'),
     authorBooks: list(saved, 'authorBooks'),
+    patentListings: list(saved, 'patentListings'),
     updatedAt: saved.updatedAt || null,
   };
 }

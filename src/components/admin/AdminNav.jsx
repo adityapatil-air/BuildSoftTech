@@ -8,6 +8,7 @@ import Icon from '../Icon';
 const ITEMS = [
   { href: '/admin', label: 'Overview & settings', icon: 'edit', exact: true },
   { href: '/admin?tab=authorBooks', label: 'Author books', icon: 'book' },
+  { href: '/admin?tab=patentListings', label: 'Patent listings', icon: 'lightbulb' },
   { href: '/admin/courses', label: 'Courses', icon: 'graduation' },
   { href: '/admin/internships', label: 'Internships', icon: 'briefcase' },
   { href: '/admin/students', label: 'Students', icon: 'users' },

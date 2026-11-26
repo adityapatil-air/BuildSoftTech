@@ -1,5 +1,5 @@
 import React from 'react';
-import { Amount, ButtonLink, CheckList, ConsultCta, Eyebrow, H2, IconTile, Note, PageHero, PaperCard, Section, SectionHead, StepCards } from '../components/ui';
+import { Amount, ButtonLink, CheckList, ConsultCta, EnquireLinks, Eyebrow, H2, IconTile, Note, PageHero, PaperCard, Section, SectionHead, StatusBadge, StepCards, Table } from '../components/ui';
 import { PATENT_SERVICES, PATENT_STEPS } from '../data/content';
 import { cn } from '../lib/utils';
 
@@ -9,15 +9,44 @@ const POINTS = [
   { icon: 'lock', title: 'Confidential', text: 'We sign an NDA before you share any details.' },
 ];
 
-const Patents = ({ settings }) => (
+const PatentTable = ({ rows, contact }) => (
+  <Section id="listed" tone="secondary">
+    <SectionHead eyebrow="Patents" title="Our patents" text="Contact us by phone, email or WhatsApp about any patent listed below." />
+    <div className="mt-8">
+      <Table
+        minWidth={860}
+        head={['#', 'Patent title', 'Application no.', 'Date', 'Field', 'Price', 'Status', 'Enquire']}
+        rows={rows.map((p, i) => {
+          const sold = p.status === 'sold';
+          return [
+            <span key="n" className="text-muted-foreground">{i + 1}</span>,
+            <strong key="t" className="font-semibold text-foreground">{p.title}</strong>,
+            <span key="a" className="whitespace-nowrap">{p.applicationNo || '—'}</span>,
+            <span key="d" className="whitespace-nowrap">{p.date || '—'}</span>,
+            <span key="f" className="text-muted-foreground">{p.field || '—'}</span>,
+            <span key="p" className="whitespace-nowrap font-display font-semibold text-primary">{String(p.price || '').trim() || 'On request'}</span>,
+            <StatusBadge key="s" sold={sold} />,
+            sold ? <span key="e" className="text-xs text-muted-foreground">—</span> : <EnquireLinks key="e" contact={contact} about={p.title} />,
+          ];
+        })}
+      />
+    </div>
+  </Section>
+);
+
+const Patents = ({ settings }) => {
+  const listed = (settings.patentListings || []).filter((p) => String(p.title || '').trim());
+  return (
   <div>
     <PageHero
       crumbs={[{ label: 'Patents' }]}
       eyebrow="Patent services"
       title="Patent filing, publication & grant support"
       intro="Protect your innovation. We help students, faculty, startups and institutions file patents in India, working with registered patent agents for every legal filing."
-      actions={<ButtonLink href="/contact?service=Patent" variant="accent">Discuss your invention, free</ButtonLink>}
+      actions={<>{listed.length > 0 && <ButtonLink href="#listed" variant="accent">See our patents</ButtonLink>}<ButtonLink href="/contact?service=Patent" variant={listed.length ? 'outline-light' : 'accent'}>Discuss your invention, free</ButtonLink></>}
     />
+
+    {listed.length > 0 && <PatentTable rows={listed} contact={settings.contact} />}
 
     <Section>
       <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
@@ -62,6 +91,7 @@ const Patents = ({ settings }) => (
 
     <ConsultCta contact={settings.contact} />
   </div>
-);
+  );
+};
 
 export default Patents;

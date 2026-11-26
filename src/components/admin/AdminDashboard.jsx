@@ -7,6 +7,7 @@ import Icon from '../Icon';
 const SECTIONS = [
   { id: 'courses', label: 'Courses & fees', icon: 'code' },
   { id: 'authorBooks', label: 'Author books', icon: 'book' },
+  { id: 'patentListings', label: 'Patent listings', icon: 'lightbulb' },
   { id: 'internshipPlans', label: 'Internship plans', icon: 'briefcase' },
   { id: 'researchPackages', label: 'Research packages', icon: 'book' },
   { id: 'patentPlans', label: 'Patent plans', icon: 'lightbulb' },
@@ -30,6 +31,15 @@ const Field = ({ label, value, onChange, hint, type = 'text', textarea, full, pl
 // Kept raw while typing (so Enter and commas work); the website trims and skips blanks.
 const toLines = (v) => v.split('\n');
 const toTags = (v) => v.split(',');
+
+const NEW_PATENT = { title: '', applicationNo: '', date: '', field: '', price: '', status: 'open' };
+const PATENT_COLS = [
+  ['title', 'Patent title', 260, 'Smart irrigation system using IoT'],
+  ['applicationNo', 'Application no.', 150, '202621012345'],
+  ['date', 'Date', 130, '12 Mar 2026'],
+  ['field', 'Field / domain', 170, 'Agriculture, IoT'],
+  ['price', 'Price', 110, '₹ 15,000'],
+];
 
 const NEW_BOOK = { title: '', role: '', details: '', price: '', status: 'open' };
 
@@ -191,6 +201,51 @@ const AdminDashboard = ({ initial, initialSection }) => {
             })}
             <button type="button" className="button button-light" onClick={() => addRow('authorBooks', { ...NEW_BOOK })}><Icon name="plus" size={14} /> Add new book</button>
           </>
+        )}
+
+        {section === 'patentListings' && (
+          <div className="admin-card">
+            <p className="form-hint" style={{ marginBottom: 14 }}>
+              The patents table on the <a href="/patents" target="_blank" rel="noreferrer">Patents</a> page. One row per patent. Leave price empty to show “On request”.
+              Set a patent to Sold when it is taken; it stays in the table marked “Sold”. Remember to save.
+            </p>
+            {!settings.patentListings.length && <div className="portal-empty" style={{ marginBottom: 16 }}><p>No patents yet. Add the first one below. The table is hidden on the website until you do.</p></div>}
+            {settings.patentListings.length > 0 && (
+              <div className="table-wrap">
+                <table className="data-table admin-table">
+                  <thead><tr><th>#</th>{PATENT_COLS.map(([, label]) => <th key={label}>{label}</th>)}<th>Status</th><th /></tr></thead>
+                  <tbody>
+                    {settings.patentListings.map((p, i) => (
+                      <tr key={i}>
+                        <td style={{ verticalAlign: 'middle' }}>{i + 1}</td>
+                        {PATENT_COLS.map(([key, , width, ph]) => (
+                          <td key={key}>
+                            {key === 'title'
+                              ? <textarea className="form-textarea" style={{ minWidth: width, minHeight: 60 }} value={p[key] || ''} placeholder={ph} onChange={(e) => set(['patentListings', i, key], e.target.value)} />
+                              : <input className="form-input" style={{ minWidth: width }} value={p[key] || ''} placeholder={ph} onChange={(e) => set(['patentListings', i, key], e.target.value)} />}
+                          </td>
+                        ))}
+                        <td>
+                          <select className="form-select" value={p.status === 'sold' ? 'sold' : 'open'} onChange={(e) => set(['patentListings', i, 'status'], e.target.value)}>
+                            <option value="open">Available</option>
+                            <option value="sold">Sold</option>
+                          </select>
+                        </td>
+                        <td>
+                          <div className="row-actions" style={{ flexWrap: 'nowrap' }}>
+                            <button type="button" className="admin-icon-btn" onClick={() => moveRow('patentListings', i, -1)} aria-label="Move up">↑</button>
+                            <button type="button" className="admin-icon-btn" onClick={() => moveRow('patentListings', i, 1)} aria-label="Move down">↓</button>
+                            <button type="button" className="admin-icon-btn is-danger" onClick={() => { if (window.confirm(`Delete “${p.title || 'this patent'}”?`)) removeRow('patentListings', i); }} aria-label="Delete patent"><Icon name="x" size={14} /></button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            <button type="button" className="button button-light" style={{ marginTop: 14 }} onClick={() => addRow('patentListings', { ...NEW_PATENT })}><Icon name="plus" size={14} /> Add patent</button>
+          </div>
         )}
 
         {section === 'internshipPlans' && plans('internshipPlans', '/ intern', 'Add plan')}
